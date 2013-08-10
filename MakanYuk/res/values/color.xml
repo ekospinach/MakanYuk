@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="cyan">#82CEC7</color>
+	<color name="beige">#E3E3E3</color>
+	<color name="beige_light">#f5f6f6</color>
+	
+	<color name="redsoft">#DB5B5A</color>
+	<color name="redsoft_pressed">#bf2b2a</color>
+	
+ 	<color name="white">#FFFFFF</color>
+ 	<color name="charcoal">#323232</color>
+ 	
+ 	<color name="overlay_colour">#66323232</color>
+ 	
+ 	<color name="bluecea">#5f9bd3</color>
+ 	<color name="bluecea_pressed">#3275b4</color>
+ 	
+ 	<color name="greenlight">#8cb990</color>
+ 	<color name="greenlight_pressed">#5e9a63</color>
+ 	
+ 	<color name="greenlight_transparent">#CC8cb990</color>
+	<color name="redsoft_transparent">#CCDB5B5A</color>
+</resources>

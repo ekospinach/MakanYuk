@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    
+<style name="Theme.Kitsune" parent="Theme.Sherlock.NoActionBar">
+	<item name="vpiIconPageIndicatorStyle">@style/Widget.IconPageIndicator</item>
+	<item name="vpiTabPageIndicatorStyle">@style/Widget.TabPageIndicator</item>
+	<item name="actionBarStyle">@style/Widget.Kitsune.ActionBar</item>
+</style>   
+
+<style name="Widget.Kitsune.ActionBar" parent="Widget.Sherlock.ActionBar">
+    <item name="android:background">@color/bluecea</item>
+    <item name="background">@color/bluecea</item>
+</style>
+ 
+<style name="button">
+    <item name="android:textColor">@color/white</item>
+    <item name="android:textStyle">bold</item>
+</style>
+  
+</resources>
