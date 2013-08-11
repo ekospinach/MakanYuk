@@ -32,7 +32,7 @@ public class AboutActivity extends Activity
 		{
 			((MakanYukApplication) getApplication()).getFlurryInstance().logEvent( "Github Button Click" );
 			
-			String url = "https://github.com/panjigautama/MakanYuk";
+			String url = "http://makan-yuk.panjigautama.com";
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.setData(Uri.parse(url));
 			startActivity(intent);

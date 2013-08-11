@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;abs__strings.xml&apos; to &apos;values-in&apos;&#x0A;- Original project: &apos;library-actionbarsherlock&apos;&#x0A;- Destination element: &apos;values-in&apos;&#x0A;- Original element: &apos;abs__strings.xml&apos;" description="Copy file" element1="res/values/abs__strings.xml" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1376236105323" target="/library-actionbarsherlock/res/values-in" units="0" version="1.0"/>
+</session>

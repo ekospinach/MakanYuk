@@ -2,6 +2,7 @@ package com.kitsune.thirdlib;
 
 import java.util.Map;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.flurry.android.FlurryAgent;
@@ -28,14 +29,14 @@ public class FlurryHelper
 		FlurryAgent.setReportLocation(enabled);
 	}
 	
-	public void startSession( Context context )
+	public void startSession( Activity activity )
 	{
-		FlurryAgent.onStartSession( context, mApiKey);
+		FlurryAgent.onStartSession( activity, mApiKey );
 	}
 	
-	public void endSession( Context context )
+	public void endSession( Activity activity )
 	{
-		FlurryAgent.onEndSession( context );
+		FlurryAgent.onEndSession( activity );
 	}
 	
 	public void logEvent( String eventId )

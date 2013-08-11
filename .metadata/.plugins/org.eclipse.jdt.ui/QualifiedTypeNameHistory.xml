@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.kitsune.foursquarehelper.Venue"/>
+<fullyQualifiedTypeName name="com.kitsune.foursquarehelper.FoursquareHelper.OnRequestVenueDetailListener"/>
+<fullyQualifiedTypeName name="com.squareup.picasso.Picasso"/>
+<fullyQualifiedTypeName name="org.json.JSONArray"/>
+<fullyQualifiedTypeName name="org.json.JSONObject"/>
+<fullyQualifiedTypeName name="com.nineoldandroids.animation.Animator.AnimatorListener"/>
+<fullyQualifiedTypeName name="com.nineoldandroids.animation.AnimatorListenerAdapter"/>
+<fullyQualifiedTypeName name="com.kitsune.foursquarehelper.PhotosItem"/>
+<fullyQualifiedTypeName name="android.widget.ImageView.ScaleType"/>
+<fullyQualifiedTypeName name="com.kitsune.makanyuk.YetAnotherImageView.OnImageChangeListiner"/>
+<fullyQualifiedTypeName name="android.util.AttributeSet"/>
+<fullyQualifiedTypeName name="com.kitsune.makanyuk.R.drawable"/>
+<fullyQualifiedTypeName name="android.preference.PreferenceActivity"/>
+<fullyQualifiedTypeName name="com.kitsune.makanyuk.R.xml"/>
+<fullyQualifiedTypeName name="com.kitsune.makanyuk.SettingActivity"/>
+<fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
+<fullyQualifiedTypeName name="com.kitsune.makanyuk.R.layout"/>
+<fullyQualifiedTypeName name="android.widget.ImageButton"/>
+<fullyQualifiedTypeName name="com.kitsune.makanyuk.AboutActivity"/>
+<fullyQualifiedTypeName name="android.widget.TextView"/>
+<fullyQualifiedTypeName name="android.view.View.OnClickListener"/>
+<fullyQualifiedTypeName name="android.widget.ImageView"/>
+<fullyQualifiedTypeName name="android.webkit.WebView.FindListener"/>
+<fullyQualifiedTypeName name="android.widget.Toast"/>
+<fullyQualifiedTypeName name="android.content.SharedPreferences"/>
+<fullyQualifiedTypeName name="android.content.SharedPreferences.OnSharedPreferenceChangeListener"/>
+<fullyQualifiedTypeName name="com.kitsune.makanyuk.R.string"/>
+<fullyQualifiedTypeName name="com.kitsune.thirdlib.FlurryHelper"/>
+<fullyQualifiedTypeName name="com.kitsune.makanyuk.MainActivity"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="com.flurry.android.FlurryAgent"/>
+<fullyQualifiedTypeName name="java.lang.Runnable"/>
+<fullyQualifiedTypeName name="com.kitsune.thirdlib.LanguageHelper"/>
+<fullyQualifiedTypeName name="android.app.Activity"/>
+<fullyQualifiedTypeName name="java.lang.Override"/>
+<fullyQualifiedTypeName name="com.kitsune.makanyuk.MakanYukApplication"/>
+<fullyQualifiedTypeName name="com.kitsune.makanyuk.R.id"/>
+</qualifiedTypeNameHistroy>

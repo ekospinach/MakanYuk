@@ -1369,37 +1369,38 @@ containing a value of this type.
         public static final int abs__toast_frame=0x7f02006f;
         public static final int avatar=0x7f020070;
         public static final int banner=0x7f020071;
-        public static final int button_blue=0x7f020072;
-        public static final int button_green=0x7f020073;
-        public static final int button_red=0x7f020074;
-        public static final int def_image=0x7f020075;
-        public static final int ic_bubble=0x7f020076;
-        public static final int ic_cup=0x7f020077;
-        public static final int ic_fire=0x7f020078;
-        public static final int ic_food=0x7f020079;
-        public static final int ic_foursquare_small=0x7f02007a;
-        public static final int ic_github_small=0x7f02007b;
-        public static final int ic_heart=0x7f02007c;
-        public static final int ic_launcher=0x7f02007d;
-        public static final int ic_light=0x7f02007e;
-        public static final int ic_location=0x7f02007f;
-        public static final int ic_location_small=0x7f020080;
-        public static final int ic_money=0x7f020081;
-        public static final int ic_paperplane=0x7f020082;
-        public static final int ic_search=0x7f020083;
-        public static final int ic_setting=0x7f020084;
-        public static final int ic_setting_small=0x7f020085;
-        public static final int ic_share=0x7f020086;
-        public static final int ic_share_small=0x7f020087;
-        public static final int powered_by_foursquare=0x7f020088;
-        public static final int shadow=0x7f020089;
-        public static final int vpi__tab_indicator=0x7f02008a;
-        public static final int vpi__tab_selected_focused_holo=0x7f02008b;
-        public static final int vpi__tab_selected_holo=0x7f02008c;
-        public static final int vpi__tab_selected_pressed_holo=0x7f02008d;
-        public static final int vpi__tab_unselected_focused_holo=0x7f02008e;
-        public static final int vpi__tab_unselected_holo=0x7f02008f;
-        public static final int vpi__tab_unselected_pressed_holo=0x7f020090;
+        public static final int big_launcher=0x7f020072;
+        public static final int button_blue=0x7f020073;
+        public static final int button_green=0x7f020074;
+        public static final int button_red=0x7f020075;
+        public static final int def_image=0x7f020076;
+        public static final int ic_bubble=0x7f020077;
+        public static final int ic_cup=0x7f020078;
+        public static final int ic_fire=0x7f020079;
+        public static final int ic_food=0x7f02007a;
+        public static final int ic_foursquare_small=0x7f02007b;
+        public static final int ic_github_small=0x7f02007c;
+        public static final int ic_heart=0x7f02007d;
+        public static final int ic_launcher=0x7f02007e;
+        public static final int ic_light=0x7f02007f;
+        public static final int ic_location=0x7f020080;
+        public static final int ic_location_small=0x7f020081;
+        public static final int ic_money=0x7f020082;
+        public static final int ic_paperplane=0x7f020083;
+        public static final int ic_search=0x7f020084;
+        public static final int ic_setting=0x7f020085;
+        public static final int ic_setting_small=0x7f020086;
+        public static final int ic_share=0x7f020087;
+        public static final int ic_share_small=0x7f020088;
+        public static final int powered_by_foursquare=0x7f020089;
+        public static final int shadow=0x7f02008a;
+        public static final int vpi__tab_indicator=0x7f02008b;
+        public static final int vpi__tab_selected_focused_holo=0x7f02008c;
+        public static final int vpi__tab_selected_holo=0x7f02008d;
+        public static final int vpi__tab_selected_pressed_holo=0x7f02008e;
+        public static final int vpi__tab_unselected_focused_holo=0x7f02008f;
+        public static final int vpi__tab_unselected_holo=0x7f020090;
+        public static final int vpi__tab_unselected_pressed_holo=0x7f020091;
     }
     public static final class id {
         public static final int TextView01=0x7f05003e;
@@ -1449,11 +1450,12 @@ containing a value of this type.
         public static final int distanceText=0x7f050049;
         public static final int edit_query=0x7f050030;
         public static final int foursquareButton=0x7f050044;
+        public static final int foursquareLogo=0x7f05004b;
         public static final int fullscreen=0x7f050013;
         public static final int githubButton=0x7f05003d;
         public static final int homeAsUp=0x7f050006;
-        public static final int imageView1=0x7f05004b;
-        public static final int imageView2=0x7f05004c;
+        public static final int imageLogoCorner=0x7f05004d;
+        public static final int imageView3=0x7f05004e;
         public static final int left=0x7f050010;
         public static final int listMode=0x7f050002;
         public static final int locationButton=0x7f050042;
@@ -1465,6 +1467,7 @@ containing a value of this type.
         public static final int margin=0x7f050012;
         public static final int none=0x7f050015;
         public static final int normal=0x7f050001;
+        public static final int nutshellText=0x7f05004c;
         public static final int right=0x7f050011;
         public static final int selected_view=0x7f050014;
         public static final int settingButton=0x7f050048;
@@ -1472,7 +1475,7 @@ containing a value of this type.
         public static final int showCustom=0x7f050008;
         public static final int showHome=0x7f050005;
         public static final int showTitle=0x7f050007;
-        public static final int slidingmenumain=0x7f05004d;
+        public static final int slidingmenumain=0x7f05004f;
         public static final int tabMode=0x7f050003;
         public static final int textView1=0x7f05003c;
         public static final int top=0x7f050019;
@@ -1524,71 +1527,85 @@ containing a value of this type.
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
+ Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abs__action_bar_home_description=0x7f0a0000;
         /**  Content description for the action bar "up" affordance. [CHAR LIMIT=NONE] 
+ Content description for the action bar "up" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abs__action_bar_up_description=0x7f0a0001;
         /**  Content description for the action menu overflow button. [CHAR LIMIT=NONE] 
+ Content description for the action menu overflow button. [CHAR LIMIT=NONE] 
          */
         public static final int abs__action_menu_overflow_description=0x7f0a0002;
         /**  Label for the "Done" button on the far left of action mode toolbars. 
+ Label for the "Done" button on the far left of action mode toolbars. 
          */
         public static final int abs__action_mode_done=0x7f0a0003;
         /**  Title for a button to expand the list of activities in ActivityChooserView [CHAR LIMIT=25] 
+ Title for a button to expand the list of activities in ActivityChooserView [CHAR LIMIT=25] 
          */
         public static final int abs__activity_chooser_view_see_all=0x7f0a0004;
         /**  Description of the shwoing of a popup window with activities to choose from. [CHAR LIMIT=NONE] 
+ Description of the shwoing of a popup window with activities to choose from. [CHAR LIMIT=NONE] 
          */
         public static final int abs__activitychooserview_choose_application=0x7f0a0005;
         /**  SearchView accessibility description for clear button [CHAR LIMIT=NONE] 
+ SearchView accessibility description for clear button [CHAR LIMIT=NONE] 
          */
         public static final int abs__searchview_description_clear=0x7f0a000a;
         /**  SearchView accessibility description for search text field [CHAR LIMIT=NONE] 
+ SearchView accessibility description for search text field [CHAR LIMIT=NONE] 
          */
         public static final int abs__searchview_description_query=0x7f0a0009;
         /**  SearchView accessibility description for search button [CHAR LIMIT=NONE] 
+ SearchView accessibility description for search button [CHAR LIMIT=NONE] 
          */
         public static final int abs__searchview_description_search=0x7f0a0008;
         /**  SearchView accessibility description for submit button [CHAR LIMIT=NONE] 
+ SearchView accessibility description for submit button [CHAR LIMIT=NONE] 
          */
         public static final int abs__searchview_description_submit=0x7f0a000b;
         /**  SearchView accessibility description for voice button [CHAR LIMIT=NONE] 
+ SearchView accessibility description for voice button [CHAR LIMIT=NONE] 
          */
         public static final int abs__searchview_description_voice=0x7f0a000c;
         /**  Description of the choose target button in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
+ Description of the choose target button in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with=0x7f0a0006;
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
+ Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f0a0007;
-        public static final int action_settings=0x7f0a000f;
-        public static final int activate_your_gps=0x7f0a0018;
+        public static final int action_settings=0x7f0a0010;
+        public static final int activate_your_gps=0x7f0a0019;
         public static final int app_name=0x7f0a000d;
-        public static final int find_location=0x7f0a0012;
-        public static final int find_location_not_found=0x7f0a0013;
-        public static final int find_on_github=0x7f0a0010;
-        public static final int find_your_location=0x7f0a0014;
-        public static final int main_text=0x7f0a0011;
+        public static final int default_locale=0x7f0a000f;
+        public static final int find_location=0x7f0a0013;
+        public static final int find_location_not_found=0x7f0a0014;
+        public static final int find_on_github=0x7f0a0011;
+        public static final int find_your_location=0x7f0a0015;
+        public static final int main_text=0x7f0a0012;
         public static final int nutshell=0x7f0a000e;
-        public static final int pref_key_distance=0x7f0a001e;
-        public static final int pref_key_flag_location_update=0x7f0a001b;
-        public static final int pref_key_language=0x7f0a0024;
-        public static final int pref_key_venue_limit_search=0x7f0a0021;
-        public static final int pref_summary_distance=0x7f0a001c;
-        public static final int pref_summary_language=0x7f0a0022;
+        public static final int pref_key_distance=0x7f0a001f;
+        public static final int pref_key_flag_location_update=0x7f0a001c;
+        public static final int pref_key_language=0x7f0a0025;
+        public static final int pref_key_venue_limit_search=0x7f0a0022;
+        public static final int pref_summary_distance=0x7f0a001d;
+        public static final int pref_summary_language=0x7f0a0023;
         /**  preferences screen  
  preferences screen  
          */
-        public static final int pref_summary_location_update_flag=0x7f0a0019;
-        public static final int pref_summary_venue_limit_search=0x7f0a001f;
-        public static final int pref_title_distance=0x7f0a001d;
-        public static final int pref_title_language=0x7f0a0023;
-        public static final int pref_title_location_update_flag=0x7f0a001a;
-        public static final int pref_title_venue_limit_search=0x7f0a0020;
-        public static final int share_message=0x7f0a0017;
-        public static final int share_subject=0x7f0a0016;
-        public static final int some_meter_away=0x7f0a0015;
+        public static final int pref_summary_location_update_flag=0x7f0a001a;
+        public static final int pref_summary_venue_limit_search=0x7f0a0020;
+        public static final int pref_title_distance=0x7f0a001e;
+        public static final int pref_title_language=0x7f0a0024;
+        public static final int pref_title_location_update_flag=0x7f0a001b;
+        public static final int pref_title_venue_limit_search=0x7f0a0021;
+        public static final int share_message=0x7f0a0018;
+        public static final int share_subject=0x7f0a0017;
+        public static final int some_meter_away=0x7f0a0016;
     }
     public static final class style {
         /** 

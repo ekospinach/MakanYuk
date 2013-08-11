@@ -3,13 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="@string/action_settings">
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:summary="@string/pref_summary_location_update_flag"
-            android:title="@string/pref_title_location_update_flag"
-            android:key="@string/pref_key_flag_location_update" 
-            />
-        <ListPreference 
+       <ListPreference 
             android:defaultValue="1000"
             android:summary="@string/pref_summary_distance"
             android:title="@string/pref_title_distance"
@@ -26,7 +20,7 @@
             android:entryValues="@array/venuelimit_array_values"
            />
         <ListPreference 
-            android:defaultValue="id"
+            android:defaultValue="@string/default_locale"
             android:summary="@string/pref_summary_language"
             android:title="@string/pref_title_language"
             android:key="@string/pref_key_language"

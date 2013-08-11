@@ -6,7 +6,7 @@
     android:background="@color/bluecea">
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/foursquareLogo"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -14,24 +14,32 @@
         android:src="@drawable/powered_by_foursquare" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/nutshellText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/imageView1"
+        android:layout_above="@+id/foursquareLogo"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="126dp"
+        android:layout_marginBottom="125dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/nutshell"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="10sp"
         android:textColor="@color/white"
         android:textStyle="bold" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageLogoCorner"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:src="@drawable/banner" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/nutshellText"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/big_launcher" />
 
 </RelativeLayout>

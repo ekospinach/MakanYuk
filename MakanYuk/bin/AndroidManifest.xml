@@ -2,16 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kitsune.makanyuk"
     android:versionCode="1"
-    android:versionName="alpha" >
+    android:versionName="beta" >
 
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
     
     <!-- PERMISSIONS  -->
-    <uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="android.permission.VIBRATE"/>
+	
     <!-- needed by : crittercism  -->
 	<uses-permission android:name="android.permission.READ_LOGS"/>
 	<uses-permission android:name="android.permission.GET_TASKS"/>

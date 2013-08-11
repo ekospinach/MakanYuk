@@ -32,7 +32,6 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kitsune.foursquarehelper.FoursquareHelper;
 import com.kitsune.foursquarehelper.FoursquareHelper.OnRequestVenueDetailListener;
@@ -88,7 +87,7 @@ public class MainActivity extends Activity
 		
 		// get application
 		mMainApplication = (MakanYukApplication) getApplication();
-		mMainApplication.setDebug(true);
+		mMainApplication.setDebug(false);
 		
 		// main components
 		mImageStageOverlay 	= (ImageView) findViewById(R.id.mainStageImageOverlay);
@@ -343,9 +342,7 @@ public class MainActivity extends Activity
 					mFoundedVenue = venues.get( position );
 					updateLocation( mCurrentLocation, mAddresses );
 					
-					showUpVenue();
-					highlightImageStageWithOverlay( true );
-					
+					showUpVenue();					
 					// get venue detail
 					mFoursquareHelper.getVenueDetail( mFoundedVenue.getId() );
 					
@@ -354,6 +351,8 @@ public class MainActivity extends Activity
 					flurryParam.put( "venue id", mFoundedVenue.getId() );
 					flurryParam.put( "venue name", mFoundedVenue.getName() );
 					mMainApplication.getFlurryInstance().logEvent( "Search Venue Success", flurryParam );
+					
+					highlightImageStageWithOverlay( true );
 
 				}
 				catch( IllegalArgumentException e )
@@ -373,7 +372,7 @@ public class MainActivity extends Activity
 		@Override
 		public void onFetchFailed(String response) 
 		{
-			Toast.makeText( MainActivity.this, response, Toast.LENGTH_LONG).show();
+			mMainApplication.debugToast( response );
 			if( isOnSearchVenue )
 			{
 				animate(mImageStage).cancel();
@@ -391,7 +390,7 @@ public class MainActivity extends Activity
 		public void onFetchSuccess(Venue venues) 
 		{
 			mFoundedVenue = venues;
-			Toast.makeText( MainActivity.this, "Photos "+mFoundedVenue.getPhotosCount(), Toast.LENGTH_LONG).show();
+			mMainApplication.debugToast( "Photos "+mFoundedVenue.getPhotosCount() );
 			if( mFoundedVenue.getPhotosCount() > 0 )
 			{
 				DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -410,7 +409,7 @@ public class MainActivity extends Activity
 		@Override
 		public void onFetchFailed(String response) 
 		{
-			Toast.makeText( MainActivity.this, response, Toast.LENGTH_LONG).show();
+			mMainApplication.debugToast( response );
 			mMainApplication.getFlurryInstance().logEvent( "GetVenue Detail Failed" );
 		}
 	};
@@ -578,7 +577,7 @@ public class MainActivity extends Activity
 			
 			// Native email client doesn't currently support HTML, but it doesn't hurt to try in case they fix it
 			emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.share_subject) );
-			String shareMessage = getString(R.string.share_message) + mFoundedVenue.getName() + " !" + mFoundedVenue.getCanonicalUrl();
+			String shareMessage = getString(R.string.share_message) + " " + mFoundedVenue.getName() + " !" + mFoundedVenue.getCanonicalUrl();
 			emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareMessage);
 			emailIntent.setType("message/rfc822");
 			

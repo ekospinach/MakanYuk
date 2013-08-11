@@ -89,6 +89,7 @@
         android:layout_below="@+id/aboutImage"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
+        android:gravity="center_vertical|center_horizontal"
         android:textAlignment="center"
         android:text="Medium Text"
         android:textStyle="bold"
@@ -115,6 +116,14 @@
         android:textSize="10sp"
         android:textStyle="bold" />
 
+    <com.kitsune.makanyuk.YetAnotherImageView
+        android:id="@+id/mainStageImage"
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/mainStageImageOverlay"
+        android:src="@drawable/ic_search" />
+    
     <ImageView
         android:id="@+id/mainStageImageOverlay"
         android:layout_width="fill_parent"
@@ -124,13 +133,5 @@
         android:layout_marginTop="5dp"
         android:alpha="0"
         android:src="@android:color/white" />
-
-    <com.kitsune.makanyuk.YetAnotherImageView
-        android:id="@+id/mainStageImage"
-        android:layout_width="fill_parent"
-        android:layout_height="200dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/mainStageImageOverlay"
-        android:src="@drawable/ic_search" />
 
 </RelativeLayout>

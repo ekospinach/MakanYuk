@@ -26,8 +26,8 @@ public class SettingActivity extends PreferenceActivity
 			{
 				if( key.equalsIgnoreCase( getString(R.string.pref_key_language) ))
 				{
-					String locale = mPrefs.getString( getString(R.string.pref_key_language), "id" );				    
-				    ((MakanYukApplication) getApplication()).changeLocale(locale);
+					String locale = mPrefs.getString( getString(R.string.pref_key_language), "id" );		
+					((MakanYukApplication) getApplication()).setLanguage(locale);
 				}
 				
 				String value = mPrefs.getString( key, "default not found" );				    
