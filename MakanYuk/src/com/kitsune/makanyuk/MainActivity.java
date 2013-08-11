@@ -118,7 +118,8 @@ public class MainActivity extends Activity
 		mVenueTitleText.setVisibility( TextView.INVISIBLE );
 		
 		mDistanceText = (TextView) findViewById(R.id.distanceText);
-
+		mDistanceText.setVisibility(TextView.INVISIBLE);
+		
 		// location helper
 		mLocHelper = new LocationHelper( this );
 		mLocHelper.setOnGetLocationListener(getLocationListener);
@@ -147,6 +148,9 @@ public class MainActivity extends Activity
 		
 		ImageView about = (ImageView) findViewById(R.id.aboutImage);
 		about.setOnClickListener( aboutButtonListener );
+		
+		ImageView foursquare = (ImageView) findViewById(R.id.foursquareButton);
+		foursquare.setOnClickListener(foursquareButtonListener);
 		
 		mButtonGroup 		= (LinearLayout) findViewById(R.id.buttonGroup);
 		mButtonGroup.setVisibility(LinearLayout.INVISIBLE);
@@ -397,16 +401,17 @@ public class MainActivity extends Activity
 	{
 		updateDistance();
 		
-		mTextStage.setVisibility( TextView.GONE );
 		mVenueTitleText.setText( mFoundedVenue.getName() );
+		mTextStage.setVisibility( TextView.GONE );
+		mDistanceText.setVisibility(TextView.VISIBLE);
 		mVenueTitleText.setVisibility( TextView.VISIBLE );
 		mButtonGroup.setVisibility(LinearLayout.VISIBLE);
-		
-		ViewHelper.setAlpha( mVenueTitleText, 0f );
+
 		ViewHelper.setAlpha( mImageStage, 0f );
 		ViewHelper.setAlpha( mButtonGroup, 0f );
 		ViewHelper.setAlpha( mDistanceText, 0f );
-		
+		ViewHelper.setAlpha( mVenueTitleText, 0f );
+
 		mImageStage.setImageDrawable( getResources().getDrawable( R.drawable.def_image ) );
 		
 		animate(mButtonGroup).alpha(1f).setDuration(500);
@@ -587,6 +592,22 @@ public class MainActivity extends Activity
 		{
 			Intent about = new Intent( MainActivity.this, AboutActivity.class );
 			startActivity(about);
+		}
+	};
+	
+	private OnClickListener foursquareButtonListener = new OnClickListener() 
+	{
+		
+		@Override
+		public void onClick(View v) 
+		{
+			if( mFoundedVenue != null && mFoundedVenue.getCanonicalUrl() != null )
+			{
+				String url = mFoundedVenue.getCanonicalUrl();
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse(url));
+				startActivity(intent);
+			}
 		}
 	};
 	

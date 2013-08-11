@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bluecea"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/aboutImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/banner" />
+
+    <LinearLayout
+        android:id="@+id/buttonGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/mainViewText"
+        android:orientation="vertical" >
+        
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/mainViewText"
+	        android:orientation="horizontal" >
+	
+	        <ImageButton
+	            android:layout_margin="5dp"
+	            android:id="@+id/locationButton"
+	            android:layout_width="100dp"
+	            android:layout_height="50dp"
+	            android:layout_weight="1"
+	            android:background="@drawable/button_green"
+	            android:src="@drawable/ic_location_small" />
+	
+	        <ImageButton
+	            android:layout_margin="5dp"
+	            android:id="@+id/shareButton"
+	            android:layout_width="100dp"
+	            android:layout_height="50dp"
+	            android:layout_weight="1"
+	            android:background="@drawable/button_green"
+	            android:src="@drawable/ic_share_small" />
+	    </LinearLayout>
+	    
+	    <ImageButton
+	        android:id="@+id/foursquareButton"
+	        android:layout_width="match_parent"
+	        android:layout_height="50dp"
+	        android:layout_marginLeft="5dp"
+	        android:layout_marginRight="5dp"
+	        android:layout_weight="1"
+	        android:background="@drawable/button_green"
+	        android:src="@drawable/ic_foursquare_small" />
+	    
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/mainViewText"
+        style="@style/button"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/mainStageImage"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/main_text" />
+
+    <TextView
+        android:id="@+id/mainLocationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="Small Text"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+		android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/mainVenueTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aboutImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:textAlignment="center"
+        android:text="Medium Text"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageButton
+        android:id="@+id/settingButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_setting_small" />
+
+    <TextView
+        android:id="@+id/distanceText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/mainVenueTitleText"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Small Text"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/mainStageImageOverlay"
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/distanceText"
+        android:layout_marginTop="5dp"
+        android:alpha="0"
+        android:src="@android:color/white" />
+
+    <com.kitsune.makanyuk.YetAnotherImageView
+        android:id="@+id/mainStageImage"
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/mainStageImageOverlay"
+        android:src="@drawable/ic_search" />
+
+</RelativeLayout>
