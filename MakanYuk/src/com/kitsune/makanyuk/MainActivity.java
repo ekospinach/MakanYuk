@@ -3,7 +3,9 @@ package com.kitsune.makanyuk;
 import static com.nineoldandroids.view.ViewPropertyAnimator.animate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import android.app.Activity;
@@ -86,6 +88,7 @@ public class MainActivity extends Activity
 		
 		// get application
 		mMainApplication = (MakanYukApplication) getApplication();
+		mMainApplication.setDebug(true);
 		
 		// main components
 		mImageStageOverlay 	= (ImageView) findViewById(R.id.mainStageImageOverlay);
@@ -112,7 +115,7 @@ public class MainActivity extends Activity
 		
 		// text
 		mLocationText 		= (TextView) findViewById(R.id.mainLocationText);
-		mLocationText.setText( "mencari lokasi mu ..." );
+		mLocationText.setText( getString(R.string.find_your_location) );
 		
 		mVenueTitleText 	= (TextView) findViewById(R.id.mainVenueTitleText);
 		mVenueTitleText.setVisibility( TextView.INVISIBLE );
@@ -123,6 +126,7 @@ public class MainActivity extends Activity
 		// location helper
 		mLocHelper = new LocationHelper( this );
 		mLocHelper.setOnGetLocationListener(getLocationListener);
+		mLocHelper.setActivateGPSMessage( getString(R.string.activate_your_gps) );
 		
 		// sensor helper & listener
 		mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -157,6 +161,20 @@ public class MainActivity extends Activity
 		
 	}
 	
+	@Override
+	protected void onStart() 
+	{
+		super.onStart();
+		mMainApplication.getFlurryInstance().startSession( MainActivity.this );
+	}
+	
+	@Override
+	protected void onStop() 
+	{
+		super.onStop();
+		mMainApplication.getFlurryInstance().endSession( MainActivity.this );
+	}
+	
 	private void populateSharedpreferences()
 	{
 		SharedPreferences prefs = ((MakanYukApplication) getApplication()).getPreferences();
@@ -185,7 +203,8 @@ public class MainActivity extends Activity
 				mTextStage.setVisibility( TextView.VISIBLE );
 				mVenueTitleText.setVisibility( TextView.INVISIBLE );
 				mButtonGroup.setVisibility( LinearLayout.INVISIBLE );
-
+				mDistanceText.setVisibility(TextView.INVISIBLE);
+				
 				// set flag
 				isOnSearchVenue = true;
 				highlightImageStageWithOverlay( false );
@@ -193,10 +212,12 @@ public class MainActivity extends Activity
 				animate(mImageStage).alpha(0f).setListener(new ImageStageAnimator(mImageStage));
 				mFoursquareHelper.requestNearestVenue( Double.toString(mCurrentLocation.getLatitude()), Double.toString(mCurrentLocation.getLongitude()), "4d4b7105d754a06374d81259", null, null, null);
 				mVibrator.vibrate(500);
-			}
-			else
-			{
-				Toast.makeText(MainActivity.this, "Sedang mencari lokasi mu..", Toast.LENGTH_SHORT).show();
+				
+				// flurry
+				Map<String, String> flurryParam = new HashMap<String,String>(2);
+				flurryParam.put( "limit", Integer.toString( mFoursquareHelper.getLimit() ) );
+				flurryParam.put( "radius", Integer.toString(mFoursquareHelper.getRadius() ) );
+				mMainApplication.getFlurryInstance().logEvent( "Search Venue", flurryParam );
 			}
 			
 		}
@@ -225,6 +246,17 @@ public class MainActivity extends Activity
 			locationStr = locationStr.replaceAll( delimiter, ", ");
 			
 			mLocationText.setText( locationStr );
+			
+			// flurry
+			Map<String, String> flurryParam = new HashMap<String,String>(5);
+			flurryParam.put( "locality", addr.getLocality() );
+			flurryParam.put( "feature", addr.getFeatureName() );
+			flurryParam.put( "sub-admin", addr.getSubAdminArea() );
+			flurryParam.put( "country", addr.getCountryName() );
+			flurryParam.put( "postal code", addr.getPostalCode() );
+
+			mMainApplication.getFlurryInstance().logEvent( "Location", flurryParam );
+
 		}
 	}
 	
@@ -234,7 +266,11 @@ public class MainActivity extends Activity
 		if( mFoundedVenue != null )
 		{
 			float distance = mLocHelper.distanceFrom( (float)mCurrentLocation.getLatitude(), (float)mCurrentLocation.getLongitude(), Float.parseFloat(mFoundedVenue.getLocationLatitude()), Float.parseFloat(mFoundedVenue.getLocationLongitude()) );
-		 	mDistanceText.setText( (int) distance + " meter away" );
+		 	mDistanceText.setText( (int) distance + " " + getString(R.string.some_meter_away) );
+		 	
+			Map<String, String> flurryParam = new HashMap<String,String>(1);
+			flurryParam.put( "distance", Float.toString(distance) );
+			mMainApplication.getFlurryInstance().logEvent( "Distance", flurryParam );
 		}
 	}
 	
@@ -249,9 +285,14 @@ public class MainActivity extends Activity
 			{
 				mAddresses = mLocHelper.getCurrentAddress();
 				updateLocation( location, mAddresses );
+				
+				// flurry
+				Map<String, String> flurryParam = new HashMap<String,String>(2);
+				flurryParam.put( "provider", location.getProvider() );
+				flurryParam.put( "accuracy", Float.toString(location.getAccuracy()) );
+				mMainApplication.getFlurryInstance().logEvent( "Location Updater", flurryParam );
+
 			}
-			
-			Toast.makeText( MainActivity.this, "latest location : "+location.getLatitude()+","+location.getLongitude(), Toast.LENGTH_SHORT ).show();
 		}
 	};
 	
@@ -289,9 +330,7 @@ public class MainActivity extends Activity
 		
 		@Override
 		public void onFetchSuccess(List<Venue> venues) 
-		{
-			Toast.makeText( MainActivity.this, "venues : "+venues.size(), Toast.LENGTH_LONG).show();
-			
+		{			
 			if( isOnSearchVenue && venues.size() > 0 )
 			{
 				try
@@ -309,6 +348,13 @@ public class MainActivity extends Activity
 					
 					// get venue detail
 					mFoursquareHelper.getVenueDetail( mFoundedVenue.getId() );
+					
+					// flurry
+					Map<String, String> flurryParam = new HashMap<String,String>(2);
+					flurryParam.put( "venue id", mFoundedVenue.getId() );
+					flurryParam.put( "venue name", mFoundedVenue.getName() );
+					mMainApplication.getFlurryInstance().logEvent( "Search Venue Success", flurryParam );
+
 				}
 				catch( IllegalArgumentException e )
 				{
@@ -317,8 +363,10 @@ public class MainActivity extends Activity
 			}
 			else
 			{
-				mTextStage.setText( getString(R.string.main_text));
+				mTextStage.setText( getString(R.string.find_location_not_found));
 			}
+			
+			mMainApplication.debugToast( "venues : "+venues.size() );
 			
 		}
 		
@@ -331,6 +379,7 @@ public class MainActivity extends Activity
 				animate(mImageStage).cancel();
 				isOnSearchVenue = false;
 			}
+			mMainApplication.getFlurryInstance().logEvent( "Search Venue Failed" );
 		}
 	};
 	
@@ -354,12 +403,15 @@ public class MainActivity extends Activity
 				}
 			}
 			
+			mMainApplication.getFlurryInstance().logEvent( "GetVenue Detail Success" );
+			
 		}
 		
 		@Override
 		public void onFetchFailed(String response) 
 		{
 			Toast.makeText( MainActivity.this, response, Toast.LENGTH_LONG).show();
+			mMainApplication.getFlurryInstance().logEvent( "GetVenue Detail Failed" );
 		}
 	};
 
@@ -501,6 +553,8 @@ public class MainActivity extends Activity
 		@Override
 		public void onClick(View v) 
 		{
+			mMainApplication.getFlurryInstance().logEvent( "Get Direction Button Click" );
+			
 			String start_address 		= "saddr=" + mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude();
 			String destination_address 	= "daddr=" + mFoundedVenue.getLocationLatitude() + "," + mFoundedVenue.getLocationLongitude();
 			String targetUri 			= "http://maps.google.com/maps?" + start_address + "&" + destination_address;
@@ -517,12 +571,14 @@ public class MainActivity extends Activity
 		@Override
 		public void onClick(View v)
 		{
+			mMainApplication.getFlurryInstance().logEvent( "Share Button Click" );
+			
 			Intent emailIntent = new Intent();
 			emailIntent.setAction(Intent.ACTION_SEND);
 			
 			// Native email client doesn't currently support HTML, but it doesn't hurt to try in case they fix it
-			emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Ayo makan disini !");
-			String shareMessage = "makan di " + mFoundedVenue.getName() + " yuk ! " + mFoundedVenue.getCanonicalUrl();
+			emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.share_subject) );
+			String shareMessage = getString(R.string.share_message) + mFoundedVenue.getName() + " !" + mFoundedVenue.getCanonicalUrl();
 			emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareMessage);
 			emailIntent.setType("message/rfc822");
 			
@@ -549,7 +605,7 @@ public class MainActivity extends Activity
 				    intent.setComponent(new ComponentName(packageName, ri.activityInfo.name));
 				    intent.setAction(Intent.ACTION_SEND);
 				    
-				    intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Ayo makan disini !");
+				    intent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.share_subject) );
 					intent.putExtra(android.content.Intent.EXTRA_TEXT, shareMessage);
 					
 				    if(packageName.contains("android.gm")) 
@@ -603,6 +659,8 @@ public class MainActivity extends Activity
 		{
 			if( mFoundedVenue != null && mFoundedVenue.getCanonicalUrl() != null )
 			{
+				mMainApplication.getFlurryInstance().logEvent( "Foursquare Button Click" );
+				
 				String url = mFoundedVenue.getCanonicalUrl();
 				Intent intent = new Intent(Intent.ACTION_VIEW);
 				intent.setData(Uri.parse(url));

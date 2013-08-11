@@ -1,0 +1,38 @@
+package com.kitsune.makanyuk;
+
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Bundle;
+import android.preference.PreferenceActivity;
+
+public class SettingActivity extends PreferenceActivity 
+{
+	
+    @Override
+    public void onCreate(Bundle savedInstanceState) 
+    {
+        super.onCreate(savedInstanceState);
+        String prefsName = ((MakanYukApplication) getApplication()).getPreferencesName();
+        
+        getPreferenceManager().setSharedPreferencesName( prefsName );
+        
+        SharedPreferences prefs = this.getSharedPreferences( prefsName, 0 );
+        prefs.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() 
+        {
+			
+			@Override
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) 
+			{
+				if( key.equalsIgnoreCase( getString(R.string.pref_key_language) ))
+				{
+					
+				}
+			}
+			
+		});
+        
+        addPreferencesFromResource(R.xml.activity_setting);
+
+    }   
+    
+}

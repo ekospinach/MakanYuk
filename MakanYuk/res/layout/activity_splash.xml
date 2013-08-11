@@ -21,7 +21,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="126dp"
         android:gravity="center_vertical|center_horizontal"
-        android:text="cari tempat makan, ga pake lama"
+        android:text="@string/nutshell"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/white"
         android:textStyle="bold" />

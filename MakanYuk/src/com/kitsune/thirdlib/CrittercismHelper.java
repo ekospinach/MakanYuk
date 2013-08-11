@@ -78,15 +78,16 @@ public class CrittercismHelper {
 	public void initCrittercism( Context context, String appID, boolean setDeviceInfoAsUserInfo )
 	{
 		if( isInitialized == false )
-		{
+		{			
+			mAppID = appID;
+			mCrittercismConfig = new JSONObject();
+			Crittercism.init( context, mAppID, getCrittercismConfig() );
+			
 			if( setDeviceInfoAsUserInfo )
 			{
 				setDeviceInfoAsUser();
 			}
-			
-			mAppID = appID;
-			mCrittercismConfig = new JSONObject();
-			Crittercism.init( context, mAppID, getCrittercismConfig() );
+
 		}
 		else
 		{

@@ -643,5 +643,15 @@ public class FoursquareHelper
 			}
 		}
 	}
+
+	public int getLimit() 
+	{
+		return mLimit;
+	}
+	
+	public int getRadius() 
+	{
+		return mRadius;
+	}
 	
 }

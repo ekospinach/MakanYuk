@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Makan Yuk !</string>
+    <string name="action_settings">Settings</string>
+    <string name="distance_limit">Radius Pencarian</string>
+    
+    <string name="main_text">cari tempat makan yuk, goyang device mu !</string>
+    <string name="find_location">mencari lokasi..</string>
+    <string name="find_your_location">mencari lokasi mu ...</string>
+    <string name="some_meter_away">meter away</string>
+    <string name="share_subject">Ayo makan disini !</string>
+    
+	<!-- preferences screen  -->
+	<string name="pref_summary_location_update_flag">always update your location to the latest position</string>
+    <string name="pref_title_location_update_flag">Location Update</string>
+    <string name="pref_key_flag_location_update">location_update</string>
+    <string name="pref_summary_distance">search radius in meter</string>
+    <string name="pref_title_distance">Search Radius</string>
+    <string name="pref_key_distance">search_radius</string>
+    <string name="pref_summary_venue_limit_search">more venue limit will give more choice</string>
+    <string name="pref_title_venue_limit_search">Venue Limit</string>
+    <string name="pref_key_venue_limit_search">venue_limit</string>
+    
+</resources>

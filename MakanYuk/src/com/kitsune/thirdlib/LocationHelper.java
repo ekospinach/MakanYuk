@@ -217,7 +217,7 @@ public class LocationHelper implements LocationListener
             boolean isGCDAvailable = Geocoder.isPresent();
             if( isGCDAvailable )
             {
-                Geocoder gcd = new Geocoder( mContext, Locale.getDefault());
+                Geocoder gcd = new Geocoder( mContext, Locale.getDefault() );
 	            addresses = gcd.getFromLocation( currentLatitude, currentLongitude, 5 );
 	            if (addresses.size() > 0) 
 	            {

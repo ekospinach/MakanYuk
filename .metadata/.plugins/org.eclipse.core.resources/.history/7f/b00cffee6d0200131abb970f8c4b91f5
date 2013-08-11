@@ -1,0 +1,29 @@
+package com.kitsune.thirdlib;
+
+import com.flurry.android.FlurryAgent;
+
+import android.content.Context;
+
+public class FlurryHelper 
+{
+	
+	private Context mContext;
+	private String mApiKey;
+	
+	public FlurryHelper( Context context, String apiKey )
+	{
+		mContext = context;
+		mApiKey = apiKey;
+	}
+	
+	private void startSession()
+	{
+		FlurryAgent.onStartSession(mContext, mApiKey);
+	}
+	
+	private void endSession()
+	{
+		
+	}
+
+}

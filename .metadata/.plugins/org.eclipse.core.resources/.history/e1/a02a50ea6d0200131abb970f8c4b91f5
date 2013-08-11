@@ -1,0 +1,13 @@
+package com.kitsune.thirdlib;
+
+import android.content.Context;
+
+public class FlurryHelper 
+{
+	
+	public FlurryHelper( Context context)
+	{
+		
+	}
+
+}

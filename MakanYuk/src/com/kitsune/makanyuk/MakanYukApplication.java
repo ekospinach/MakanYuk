@@ -1,19 +1,31 @@
 package com.kitsune.makanyuk;
 
+import java.util.Locale;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.content.res.Configuration;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.kitsune.thirdlib.CrittercismHelper;
+import com.kitsune.thirdlib.FlurryHelper;
 
 public class MakanYukApplication extends Application
 {
 
-	public final String TAG = "WorkIN";
+	public final String TAG = "MakanYuk";
+	
 	private CrittercismHelper crittercism;
-	private final String PREFS_NAME = "makayuk_preferences";
+	private FlurryHelper mFlurry;
+	
+	private final String PREFS_NAME 		= "makanyuk_preferences";
 	private final String CRITTERCISM_APP_ID = "520732a5558d6a563b000004";
+	private final String FLURRY_API_KEY 	= "7DK4YWV82HT394T2GSZ9";
+
+	private boolean isDebug = false;
 	
 	@Override
 	public void onCreate() 
@@ -22,7 +34,9 @@ public class MakanYukApplication extends Application
 		crittercism = new CrittercismHelper();
 		Log.i(TAG, "@Override"); 
 		
+		initSharedPreferences();
 		initCrittercism(getApplicationContext());
+		mFlurry = new FlurryHelper(getApplicationContext(), FLURRY_API_KEY);
 	}
 	
 	@Override
@@ -36,6 +50,7 @@ public class MakanYukApplication extends Application
 	public void onLowMemory() 
 	{
 		super.onLowMemory();
+		Log.w(TAG, "onLowMemory"); 
 	}
 	
 	public SharedPreferences getPreferences()
@@ -57,6 +72,51 @@ public class MakanYukApplication extends Application
 	public synchronized void reportException( Exception exception )
 	{
 		crittercism.handleException(exception);
+	}
+	
+	public void setDebug( boolean enabled )
+	{
+		isDebug = enabled;
+	}
+
+	public void debugToast( String message ) 
+	{
+		if( isDebug )
+		{
+			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT ).show();
+		}
+	}
+	
+	// for makan yuk only
+	private void initSharedPreferences()
+	{
+		SharedPreferences prefs = getPreferences();
+		String limit 	= prefs.getString( getString(R.string.pref_key_venue_limit_search), "10" );
+		String radius 	= prefs.getString( getString(R.string.pref_key_distance), "1000" );
+		String locale 	= prefs.getString( getString(R.string.pref_key_distance), "in" );
+
+	    Editor prefsEditor = prefs.edit();
+	    prefsEditor.putBoolean( getString(R.string.pref_key_flag_location_update), true );
+	    prefsEditor.putString( getString(R.string.pref_key_venue_limit_search), limit );
+	    prefsEditor.putString( getString(R.string.pref_key_distance), radius );
+	    prefsEditor.putString( getString(R.string.pref_key_language), locale );
+	    prefsEditor.commit();
+	    
+	    changeLocale(locale);
+	}
+	
+	public void changeLocale( String newLocale )
+	{
+        Locale locale = new Locale( newLocale ); 
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+	}
+	
+	public FlurryHelper getFlurryInstance()
+	{
+		return mFlurry;
 	}
 	
 }

@@ -21,6 +21,8 @@ public class AboutActivity extends Activity
 		
 		githubButton = (ImageButton) findViewById(R.id.githubButton);
 		githubButton.setOnClickListener( githubButtonListener );
+		
+		((MakanYukApplication) getApplication()).getFlurryInstance().pageView();
 	}
 	
 	private OnClickListener githubButtonListener = new OnClickListener() 
@@ -28,11 +30,28 @@ public class AboutActivity extends Activity
 		@Override
 		public void onClick(View v) 
 		{
+			((MakanYukApplication) getApplication()).getFlurryInstance().logEvent( "Github Button Click" );
+			
 			String url = "https://github.com/panjigautama/MakanYuk";
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.setData(Uri.parse(url));
 			startActivity(intent);
 		}
 	};
+	
+	@Override
+	protected void onStart() 
+	{
+		super.onStart();
+		((MakanYukApplication) getApplication()).getFlurryInstance().startSession( AboutActivity.this );
+	}
+	
+	@Override
+	protected void onStop() 
+	{
+		super.onStop();
+		((MakanYukApplication) getApplication()).getFlurryInstance().endSession( AboutActivity.this );
+	}
+
 	
 }

@@ -1,0 +1,25 @@
+package com.kitsune.makanyuk;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceActivity;
+
+public class SettingActivity extends PreferenceActivity 
+{
+	
+    @Override
+    public void onCreate(Bundle savedInstanceState) 
+    {
+        super.onCreate(savedInstanceState);
+        String prefsName = ((MakanYukApplication) getApplication()).getPreferencesName();
+        
+//        getPreferenceManager().setSharedPreferencesName( prefsName );
+//        addPreferencesFromResource(R.xml.activity_setting);
+        
+        SharedPreferences prefs = this.getSharedPreferences(prefsName, 0);
+        prefs.registerOnSharedPreferenceChangeListener(listener);
+        addPreferencesFromResource(R.xml.activity_setting);
+
+    }   
+    
+}

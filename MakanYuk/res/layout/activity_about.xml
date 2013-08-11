@@ -12,7 +12,7 @@
         android:layout_above="@+id/githubButton"
         android:layout_alignParentLeft="true"
         android:gravity="center_vertical|center_horizontal"
-        android:text="application source code is available on github"
+        android:text="@string/find_on_github"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/white"
         android:textStyle="bold" />

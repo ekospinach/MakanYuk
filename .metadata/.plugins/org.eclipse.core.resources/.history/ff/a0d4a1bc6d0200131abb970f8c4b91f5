@@ -1,0 +1,11 @@
+package com.kitsune.thirdlib;
+
+public class FlurryHelper 
+{
+	
+	public FlurryHelper( Context context)
+	{
+		
+	}
+
+}

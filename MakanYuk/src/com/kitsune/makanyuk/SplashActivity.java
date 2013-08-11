@@ -15,7 +15,6 @@ public class SplashActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView( R.layout.activity_splash );
 		
-		initSharedPreferences();
 		Thread t = new Thread(new Runnable() 
 		{
 			
@@ -38,19 +37,19 @@ public class SplashActivity extends Activity
 		});
 		t.start();
 	}
-
-	private void initSharedPreferences()
+	
+	@Override
+	protected void onStart() 
 	{
-		SharedPreferences prefs = ((MakanYukApplication) getApplication()).getPreferences();
-		String limit 	= prefs.getString( getString(R.string.pref_key_venue_limit_search), "10" );
-		String radius 	= prefs.getString( getString(R.string.pref_key_distance), "1000" );
-		
-	    Editor prefsEditor = prefs.edit();
-	    prefsEditor.putBoolean( getString(R.string.pref_key_flag_location_update), true );
-	    prefsEditor.putString( getString(R.string.pref_key_venue_limit_search), limit );
-	    prefsEditor.putString( getString(R.string.pref_key_distance), radius );
-	    prefsEditor.commit();
+		super.onStart();
+		((MakanYukApplication) getApplication()).getFlurryInstance().startSession( SplashActivity.this );
 	}
 	
-	
+	@Override
+	protected void onStop() 
+	{
+		super.onStop();
+		((MakanYukApplication) getApplication()).getFlurryInstance().endSession( SplashActivity.this );
+	}
+
 }

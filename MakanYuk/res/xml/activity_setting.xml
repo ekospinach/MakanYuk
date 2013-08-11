@@ -2,7 +2,7 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="Setting">
+        android:title="@string/action_settings">
         <CheckBoxPreference
             android:defaultValue="true"
             android:summary="@string/pref_summary_location_update_flag"
@@ -24,6 +24,14 @@
             android:key="@string/pref_key_venue_limit_search"
             android:entries="@array/venuelimit_array_values"
             android:entryValues="@array/venuelimit_array_values"
+           />
+        <ListPreference 
+            android:defaultValue="id"
+            android:summary="@string/pref_summary_language"
+            android:title="@string/pref_title_language"
+            android:key="@string/pref_key_language"
+            android:entries="@array/language_array_titles"
+            android:entryValues="@array/language_array_values"
            />
     </PreferenceCategory>
 </PreferenceScreen>
