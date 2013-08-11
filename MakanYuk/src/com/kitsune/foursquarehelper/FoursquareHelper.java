@@ -17,27 +17,30 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+/**
+ * Foursquare Helper
+ * helper class to help gaining information from foursquare
+ * @author panjigautama
+ */
 public class FoursquareHelper 
 {
 	
 	private final String TAG = "FoursquareHelper";
 	
-	AsyncHttpClient mHttpClient;
-	
+	private AsyncHttpClient mHttpClient;
 	private String mClientID;
 	private String mClientSecret;
-	
-	// food categories
-	private final String CATEGORY_FOOD 	= "4d4b7105d754a06374d81259";
+	private boolean mIsDebug = false;
 	
 	// API
 	private final String API_SEARCH 	= "https://api.foursquare.com/v2/venues/search";
+	private final String API_VENUE		= "https://api.foursquare.com/v2/venues/";
 	
 	// default
 	private int mRadius = 1000;
 	private int mLimit  = 10;
 	
-	// 4square param
+	// foursquare param
 	private final String PARAM_LL 				= "ll";
 	private final String PARAM_LIMIT 			= "limit";
 	private final String PARAM_RADIUS 			= "radius";
@@ -49,6 +52,7 @@ public class FoursquareHelper
 	private final String PARAM_VERSIONING		= "v";
 	
 	private OnRequestVenueListener mRequestFetchVenue;
+	private OnRequestVenueDetailListener mRequestFetchVenueDetail;
 
 	public FoursquareHelper( Context context )
 	{
@@ -67,14 +71,45 @@ public class FoursquareHelper
 		mClientSecret 	= clientSecret;
 	}
 	
+	public void setDebug( boolean isDebug )
+	{
+		 mIsDebug = isDebug;
+	}
+	
+	/**
+	 * set radius for searching
+	 * @param radius radius value in meters
+	 */
 	public void setRadius( int radius )
 	{
 		this.mRadius = radius;
 	}
 	
+	/**
+	 * set limit for searching venue request
+	 * @param limit limit request up to 50 venues
+	 */
+	public void setLimit( int limit )
+	{
+		this.mLimit = limit;
+	}
+	
+	/**
+	 * set listener that will handle callback from venue search request
+	 * @param listener this listener will be called when requesting search
+	 */
 	public void setOnRequestVenueListener( OnRequestVenueListener listener ) 
 	{
 		mRequestFetchVenue = listener;
+	}
+	
+	/**
+	 * set listener that will handle callback from venue detail request
+	 * @param listener this listener will be called when requesting detail of venue
+	 */
+	public void setOnRequestVenueDetailListener( OnRequestVenueDetailListener listener ) 
+	{
+		mRequestFetchVenueDetail = listener;
 	}
 	
 	/**
@@ -82,7 +117,6 @@ public class FoursquareHelper
 	 */
 	public interface OnRequestVenueListener 
 	{
-		
 		/**
 		 * called when request failed
 		 * @param response error message
@@ -95,6 +129,23 @@ public class FoursquareHelper
 		void onFetchSuccess( List<Venue> venues );
 	}
 	
+	/**
+	 * Interface for request detail venue, this must be set before calling any request to get venue details.
+	 */
+	public interface OnRequestVenueDetailListener
+	{
+		/**
+		 * called when request failed
+		 * @param response error message
+		 */
+		void onFetchFailed( String response );
+		/**
+		 * called when request success, venues may in zero item
+		 * @param venues list of venue objects
+		 */
+		void onFetchSuccess( Venue venues );
+	}
+	
 	public void exploreVenue()
 	{
 		// TODO explore venue api
@@ -105,15 +156,73 @@ public class FoursquareHelper
 		// TODO check in venue api
 	}
 	
-	private String getCurrentDate()
+	/**
+	 * get venue details like photos, mayor, and many mores
+	 * @param venueId venue id in string
+	 */
+	public void getVenueDetail( String venueId )
 	{
-		Calendar c = Calendar.getInstance();
-		System.out.println("Current time => " + c.getTime());
-
-		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-		String formattedDate = df.format(c.getTime());
+		String URL = API_VENUE + venueId + "?";
 		
-		return formattedDate;
+		// build request param
+		RequestParams params = new RequestParams();
+		if( (mClientID != null ) && (mClientSecret != null) )
+		{
+			params.put( PARAM_CLIENT_ID, mClientID );
+			params.put( PARAM_CLIENT_SECRET, mClientSecret );
+		}
+		else
+		{
+			Log.e( TAG, "client id and client secret not initialize !" );
+			return;
+		}
+		params.put( PARAM_VERSIONING, getCurrentDate() );
+		
+		mHttpClient.get( URL, params, new AsyncHttpResponseHandler() 
+		{
+			
+			
+		    @Override
+			public void onFailure(Throwable throwable, String msg) 
+		    {
+		    	
+		    	if ( throwable.getCause() instanceof ConnectTimeoutException ) 
+				{
+		    		msg = "Request timeout";
+			    }
+		    	
+		    	printDebug( DEBUG_ERROR, "Request failed : "+msg );
+				mRequestFetchVenueDetail.onFetchFailed( msg );
+			}
+
+			@Override
+		    public void onSuccess(String response) 
+		    {
+		    	try 
+		    	{
+					JSONObject foursquareResponseObj = new JSONObject( response );					
+					if( isResponseOK( foursquareResponseObj ) )
+					{
+						Venue venues = extractObject( foursquareResponseObj.getJSONObject("response") );
+						mRequestFetchVenueDetail.onFetchSuccess( venues );
+					}
+					else
+					{
+						printDebug( DEBUG_ERROR, "Request failed" );
+						mRequestFetchVenueDetail.onFetchFailed( response );
+					}
+					
+				} 
+		    	catch (JSONException e) 
+		    	{
+		    		printDebug( DEBUG_ERROR, "Returning value from foursquare API is different" );
+		    		mRequestFetchVenueDetail.onFetchFailed( response );
+				}
+		    	
+		    }
+		    
+		});
+		
 	}
 	
 	/**
@@ -202,7 +311,7 @@ public class FoursquareHelper
 		    		msg = "Request timeout";
 			    }
 		    	
-		    	Log.e( TAG, "Request failed : "+msg );
+		    	printDebug( DEBUG_ERROR, "Request failed : "+msg );
 				mRequestFetchVenue.onFetchFailed( msg );
 			}
 
@@ -211,32 +320,53 @@ public class FoursquareHelper
 		    {
 		    	try 
 		    	{
-					JSONObject jsonObj = new JSONObject( response );
-					
-					JSONObject meta = jsonObj.getJSONObject("meta");
-					int code = meta.getInt("code");
-					
-					if( code == 200 )
+					JSONObject foursquareResponseObj = new JSONObject( response );					
+					if( isResponseOK( foursquareResponseObj ) )
 					{
-						List<Venue> venues = extractObject( jsonObj.getJSONObject("response") );
+						List<Venue> venues = extractArrayObject( foursquareResponseObj.getJSONObject("response") );
 						mRequestFetchVenue.onFetchSuccess( venues );
 					}
 					else
 					{
-						Log.e( TAG, "Request failed" );
+						printDebug( DEBUG_ERROR, "Request failed" );
 						mRequestFetchVenue.onFetchFailed( response );
 					}
 					
 				} 
 		    	catch (JSONException e) 
 		    	{
-		    		Log.e( TAG, "Returning value from foursquare API is different" );
+		    		printDebug( DEBUG_ERROR, "Returning value from foursquare API is different" );
 		    		mRequestFetchVenue.onFetchFailed( response );
 				}
 		    	
 		    }
 		    
 		});
+	}
+	
+	private boolean isResponseOK( JSONObject jsonObj )
+	{
+		JSONObject meta;
+		int code = 0;
+		try 
+		{
+			meta = jsonObj.getJSONObject("meta");
+			code = meta.getInt("code");
+			if( code == 200 )
+			{
+				return true;
+			}
+			else
+			{
+				printDebug(DEBUG_ERROR, "message response : " +code );
+			}
+		} 
+		catch (JSONException e) 
+		{
+			printDebug(DEBUG_ERROR, "message response failed " );
+		}
+
+		return false;
 	}
 	
 	private int extractIntValue( JSONObject jsonObj, String key )
@@ -248,7 +378,7 @@ public class FoursquareHelper
 		}
 		catch( JSONException e )
 		{
-			Log.e( TAG, key + " value is not found" );
+			printDebug( DEBUG_ERROR, key + " value is not found" );
 		}
 		return value;
 	}
@@ -262,7 +392,7 @@ public class FoursquareHelper
 		}
 		catch( JSONException e )
 		{
-			Log.e( TAG, key + " value is not found" );
+			printDebug( DEBUG_ERROR, key + " value is not found" );
 		}
 		return value;
 	}
@@ -276,7 +406,7 @@ public class FoursquareHelper
 		}
 		catch( JSONException e )
 		{
-			Log.e( TAG, key + " value is not found" );
+			printDebug( DEBUG_ERROR, key + " value is not found" );
 		}
 		return value;
 	}
@@ -290,7 +420,7 @@ public class FoursquareHelper
 		}
 		catch( JSONException e )
 		{
-			Log.e( TAG, key + " object is not found" );
+			printDebug( DEBUG_ERROR, key + " object is not found" );
 		}
 		return value;
 	}
@@ -304,7 +434,7 @@ public class FoursquareHelper
 		}
 		catch( JSONException e )
 		{
-			Log.e( TAG, key + " object is not found" );
+			printDebug( DEBUG_ERROR, key + " object is not found" );
 		}
 		return value;
 	}
@@ -313,8 +443,10 @@ public class FoursquareHelper
 	{
 		Venue venue = new Venue();
 		
+		String name = extractStringValue( venueObjects, "name" );
+		
 		venue.setId( extractStringValue( venueObjects,"id" ) );
-		venue.setName( extractStringValue( venueObjects, "name" ) );
+		venue.setName( name );
 		venue.setCanonicalUrl( extractStringValue( venueObjects, "canonicalUrl" ));
 		venue.setStoreId( extractStringValue( venueObjects, "storeId" ));
 		venue.setReferralId( extractStringValue( venueObjects, "referralId" ));
@@ -377,34 +509,57 @@ public class FoursquareHelper
 		{
 			venue.setPhotosCount( extractIntValue( photosObj, "count" ));
 			
-			JSONArray photosItemsObj = extractJSONArrayValue( venueObjects, "items");
-			if( photosItemsObj != null && photosItemsObj.length() != 0 )
+			JSONArray photosGroups = extractJSONArrayValue( photosObj, "groups");
+			if( photosGroups != null && photosGroups.length() > 0 )
 			{
-				int counter = 0;
-				while( counter < photosItemsObj.length() )
+				int counter_group = 0;
+				int group_length = photosGroups.length();
+				while( counter_group < group_length )
 				{
-					try 
+					try
 					{
-						JSONObject photosItemObj = photosItemsObj.getJSONObject( counter );
-						
-						PhotosItem photosItem = new PhotosItem();
-						
-						photosItem.setCreatedAt( extractIntValue( photosItemObj, "createdAt" ));
-						photosItem.setPrefix( extractStringValue( photosItemObj, "prefix" ));
-						photosItem.setSuffix( extractStringValue( photosItemObj, "suffix" ));
-						photosItem.setWidth( extractIntValue( photosItemObj, "width" ));
-						photosItem.setHeight( extractIntValue( photosItemObj, "height" ));
-
-						venue.addPhotosItems(photosItem);
-						
-					} 
+						JSONObject groupObject 	 = photosGroups.getJSONObject(counter_group);
+						JSONArray photosItemsObj = extractJSONArrayValue( groupObject, "items");
+						if( photosItemsObj != null && photosItemsObj.length() != 0 )
+						{
+							int counter = 0;
+							int photosItems_length = photosItemsObj.length();
+							while( counter < photosItems_length )
+							{
+								try 
+								{
+									JSONObject photosItemObj = photosItemsObj.getJSONObject( counter );
+									
+									PhotosItem photosItem = new PhotosItem();
+									
+									photosItem.setCreatedAt( extractIntValue( photosItemObj, "createdAt" ));
+									photosItem.setPrefix( extractStringValue( photosItemObj, "prefix" ));
+									photosItem.setSuffix( extractStringValue( photosItemObj, "suffix" ));
+									photosItem.setWidth( extractIntValue( photosItemObj, "width" ));
+									photosItem.setHeight( extractIntValue( photosItemObj, "height" ));
+	
+									venue.addPhotosItems(photosItem);
+								} 
+								catch (JSONException e) 
+								{
+									printDebug( DEBUG_ERROR, e.getMessage() );
+								}
+								
+								counter++;
+							}
+						}
+					}
 					catch (JSONException e) 
 					{
-						e.printStackTrace();
+						printDebug( DEBUG_ERROR, e.getMessage() );
 					}
+					
+					counter_group++;
 				}
 				
 			}
+			
+			
 		}
 		
 		// reason
@@ -416,7 +571,7 @@ public class FoursquareHelper
 		return venue;
 	}
 	
-	private List<Venue> extractObject( JSONObject jsonObj )
+	private List<Venue> extractArrayObject( JSONObject jsonObj )
 	{
 		List<Venue> venues = new ArrayList<Venue>();
 		try 
@@ -437,10 +592,56 @@ public class FoursquareHelper
 		} 
 		catch (JSONException e) 
 		{
-			e.printStackTrace();
+			printDebug( DEBUG_ERROR, "venues not found !" );
 		}
 		
 		return venues;
+	}
+	
+	private Venue extractObject( JSONObject jsonObj )
+	{
+		Venue venue = new Venue();
+		try 
+		{
+			JSONObject venueObject = jsonObj.getJSONObject( "venue" );
+			venue = extractVenueObjectFromJSONObject( venueObject );
+		} 
+		catch (JSONException e) 
+		{
+			printDebug( DEBUG_ERROR, "venue not found !" );
+		}
+		
+		return venue;
+	}
+	
+	private String getCurrentDate()
+	{
+		Calendar c 				= Calendar.getInstance();
+		SimpleDateFormat df 	= new SimpleDateFormat("yyyyMMdd");
+		String formattedDate 	= df.format(c.getTime());
+		return formattedDate;
+	}
+	
+	public final int DEBUG 			= 0;
+	public final int DEBUG_ERROR 	= 1;
+	public final int DEBUG_INFO	 	= 2;
+	private void printDebug( int debugType, String message )
+	{
+		if( mIsDebug )
+		{
+			switch( debugType )
+			{
+				case DEBUG:
+					Log.d( TAG , message );
+					break;
+				case DEBUG_ERROR:
+					Log.e( TAG , message );
+					break;
+				case DEBUG_INFO:
+					Log.i( TAG , message );
+					break;
+			}
+		}
 	}
 	
 }

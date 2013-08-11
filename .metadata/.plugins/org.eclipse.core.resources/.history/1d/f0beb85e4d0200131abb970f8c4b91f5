@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Setting">
+        <CheckBoxPreference
+            android:summary="@string/pref_summary_location_update_flag"
+            android:title="@string/pref_title_location_update_flag"
+            android:key="@string/pref_key_flag_location_update" />
+        <EditTextPreference 
+            android:summary="@string/pref_summary_distance"
+            android:title="@string/pref_title_distance"
+            android:key="@string/pref_key_distance"/>
+        <EditTextPreference 
+            android:summary="@string/pref_summary_venue_limit_search"
+            android:title="@string/pref_title_venue_limit_search"
+            android:key="@string/pref_key_venue_limit_search"/>
+    </PreferenceCategory>
+</PreferenceScreen>

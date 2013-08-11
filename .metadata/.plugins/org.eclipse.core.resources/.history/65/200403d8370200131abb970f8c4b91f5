@@ -1,0 +1,39 @@
+package com.kitsune.makanyuk;
+
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
+
+public class YetAnotherImageView extends ImageView {
+
+    public YetAnotherImageView(Context context) {
+        super(context);
+    }
+
+    OnImageChangeListiner onImageChangeListiner;
+
+    public void setImageChangeListiner(
+            OnImageChangeListiner onImageChangeListiner) {
+        this.onImageChangeListiner = onImageChangeListiner;
+    }
+
+    @Override
+    public void setBackgroundResource(int resid) {
+        super.setBackgroundResource(resid);
+        if (onImageChangeListiner != null)
+            onImageChangeListiner.imageChangedinView();
+    }
+
+
+    @Override
+    public void setBackgroundDrawable(Drawable background) {
+        super.setBackgroundDrawable(background);
+        if (onImageChangeListiner != null)
+            onImageChangeListiner.imageChangedinView();
+    }
+
+
+    public static interface OnImageChangeListiner {
+        public void imageChangedinView();
+    }
+}

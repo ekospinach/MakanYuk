@@ -281,53 +281,38 @@ public class Venue
 		this.photosItems.add(photosItems);
 	}
 	
-}
-
-class PhotosItem
-{
+	/**
+	 * get photo url, if width is not specified it will get the image default width
+	 * @param position photos index
+	 * @return image URL string
+	 */
+	public String getPhotoURL( int position )
+	{
+		String imageURl = null;
+		if( this.getPhotosCount() > 0 )
+		{
+			PhotosItem photo 	= photosItems.get(position);
+			int imageWidth	= photo.getWidth();
+			imageURl 			= photo.getPrefix() + "width" + imageWidth + photo.getSuffix();
+		}
+		return imageURl;
+	}
 	
-	String id;
-	int createdAt;
-	String prefix;
-	String suffix;
-	int width;
-	int height;
-	
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public int getCreatedAt() {
-		return createdAt;
-	}
-	public void setCreatedAt(int createdAt) {
-		this.createdAt = createdAt;
-	}
-	public String getPrefix() {
-		return prefix;
-	}
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
-	public String getSuffix() {
-		return suffix;
-	}
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
-	}
-	public int getWidth() {
-		return width;
-	}
-	public void setWidth(int width) {
-		this.width = width;
-	}
-	public int getHeight() {
-		return height;
-	}
-	public void setHeight(int height) {
-		this.height = height;
+	/**
+	 * get photo url, if width is not specified it will get the image default width
+	 * @param position photos index
+	 * @param imageWidth image width in pixel
+	 * @return image URL string
+	 */
+	public String getPhotoURL( int position, int imageWidth )
+	{
+		String imageURl = null;
+		if( this.getPhotosCount() > 0 )
+		{
+			PhotosItem photo 	= photosItems.get(position);
+			imageURl 			= photo.getPrefix() + "width" + imageWidth + photo.getSuffix();
+		}
+		return imageURl;
 	}
 	
 }

@@ -15,8 +15,37 @@ import com.crittercism.app.Crittercism;
  */
 public class CrittercismHelper {
 
-	private final String CRITTERCISM_APP_ID = "5201d287558d6a2997000007";
+	private String mAppID;
 	private final String TAG = "CRITTERCISM HELPER";
+	private JSONObject mCrittercismConfig;
+	private static boolean isInitialized = false;
+	
+	private void setDeviceInfoAsUser()
+	{
+		try 
+		{
+						
+			// instantiate metadata json object
+			JSONObject metadata = new JSONObject();
+			
+			// add arbitrary metadata
+			metadata.put("sdk", 		android.os.Build.VERSION.SDK_INT);
+			metadata.put("device", 		android.os.Build.DEVICE);
+			metadata.put("model", 		android.os.Build.MODEL);
+			metadata.put("product", 	android.os.Build.PRODUCT);
+
+			// send metadata to crittercism (asynchronously)
+			Crittercism.setMetadata(metadata);
+			
+			String username = android.os.Build.PRODUCT+android.os.Build.VERSION.SDK_INT;
+			Crittercism.setUsername( username );
+			
+		} 
+		catch (JSONException e)
+		{
+		    Log.e( TAG, e.getMessage() );
+		}
+	}
 	
 	/**
 	 * getCrittercismConfig
@@ -24,32 +53,45 @@ public class CrittercismHelper {
 	 * @return json JSONObject of the crittercism config
 	 */
 	private JSONObject getCrittercismConfig()
-	{
-		JSONObject crittercismConfig = new JSONObject();
-		
+	{		
 		boolean shouldIncludeVersionCode = true;
-		boolean shouldCollectLogcat = true;
+		boolean shouldCollectLogcat 	 = true;
 		
 		try 
 		{
-			crittercismConfig.put( "includeVersionCode", shouldIncludeVersionCode );
-			crittercismConfig.put( "shouldCollectLogcat", shouldCollectLogcat );
+			mCrittercismConfig.put( "includeVersionCode", shouldIncludeVersionCode );
+			mCrittercismConfig.put( "shouldCollectLogcat", shouldCollectLogcat );
 		} 
 		catch (JSONException e)
 		{
 		    Log.e( TAG, e.getMessage() );
 		}
-		return crittercismConfig;
+		return mCrittercismConfig;
 	}
 	
 	/**
 	 * initCrittercism
 	 * initialization of crittercism instance, call this in every activity to be tracked
 	 * @param context context of current active activity
+	 * @param appID critercism application id
 	 */
-	public void initCrittercism( Context context )
+	public void initCrittercism( Context context, String appID, boolean setDeviceInfoAsUserInfo )
 	{
-		Crittercism.init( context, CRITTERCISM_APP_ID, getCrittercismConfig() );
+		if( isInitialized == false )
+		{
+			if( setDeviceInfoAsUserInfo )
+			{
+				setDeviceInfoAsUser();
+			}
+			
+			mAppID = appID;
+			mCrittercismConfig = new JSONObject();
+			Crittercism.init( context, mAppID, getCrittercismConfig() );
+		}
+		else
+		{
+			Log.w( TAG, "Crittercism already initialized" );
+		}
 	}
 	
 	/**

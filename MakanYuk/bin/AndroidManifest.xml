@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kitsune.makanyuk"
     android:versionCode="1"
-    android:versionName="0.1" >
+    android:versionName="alpha" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -32,24 +32,17 @@
         android:theme="@style/Theme.Kitsune" >
         <activity
             android:name="com.kitsune.makanyuk.SplashActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" 
+            android:configChanges="keyboardHidden|orientation|screenSize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-       	<activity android:name="com.kitsune.makanyuk.MainActivity"></activity>
-        
-        <!-- needed by : little-fluffy-location -->
-		<service android:name="com.littlefluffytoys.littlefluffylocationlibrary.LocationBroadcastService" />
-		<receiver android:name="com.littlefluffytoys.littlefluffylocationlibrary.StartupBroadcastReceiver" android:exported="true">
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED" />  
-			</intent-filter>  
-		</receiver>
-		<receiver android:name="com.littlefluffytoys.littlefluffylocationlibrary.PassiveLocationChangedReceiver" android:exported="true" />
-        
+       	<activity android:name="com.kitsune.makanyuk.MainActivity" android:screenOrientation="portrait" android:configChanges="keyboardHidden|orientation|screenSize" ></activity>
+       	<activity android:name="com.kitsune.makanyuk.SettingActivity" ></activity>
+       	<activity android:name="com.kitsune.makanyuk.AboutActivity" android:screenOrientation="portrait" android:configChanges="keyboardHidden|orientation|screenSize"></activity>
     </application>
 
 </manifest>

@@ -20,24 +20,30 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 
+/**
+ * LocationHelper class to help getting user location
+ * @author panjigautama
+ */
 public class LocationHelper implements LocationListener
 {
 	private final String TAG = "LocationHelper";
-
-	private Context mContext;
-	private LocationManager mLocationManager;
+	private String mActiveGPSmessage = "Activate GPS for better experience";
 	private String mProvider;
-	private OnGetLocationListener mGetLocationListener;
+	private Context mContext;
 	private Location mLocation;
 	private Criteria mCriteria;
-	private boolean isOnlyUseEnabledProvider = true;
-	
+	private LocationManager mLocationManager;
+	private OnGetLocationListener mGetLocationListener;
+
+	private boolean mIsOnlyUseEnabledProvider 	 = true;
+	private boolean mIsPromptGPSEnabled 		 = true;
+	private static boolean mIsInitLocationCalled = false;
+
 	private int mIntervalUpdate = 1000;
 	private int mMinimumDistance = 0;
 	
-	private static final int INTERVAL_LOCATION_CHECKER = 1000 * 60 * 1;
-	
-	private static boolean isInitLocationCalled = false;
+	private final int MINUTES = 1000 * 60;
+	private final int INTERVAL_LOCATION_CHECKER = MINUTES * 1;
 	
 	public LocationHelper(Context context) 
 	{
@@ -46,6 +52,16 @@ public class LocationHelper implements LocationListener
 		mCriteria.setAccuracy(Criteria.ACCURACY_FINE);
 		
 		mLocationManager = (LocationManager) mContext.getSystemService( Context.LOCATION_SERVICE );
+	}
+	
+	public void setPromptActivateGPS( boolean enabled )
+	{
+		mIsPromptGPSEnabled = enabled;
+	}
+	
+	public void setActivateGPSMessage( String message )
+	{
+		mActiveGPSmessage = message;
 	}
 	
 	public void setCriteria( Criteria criteria )
@@ -71,43 +87,46 @@ public class LocationHelper implements LocationListener
 	public void initLocation()
 	{
 		// set flag
-		if( !isInitLocationCalled )
+		if( !mIsInitLocationCalled )
 	    {
-	    	isInitLocationCalled = true;
+	    	mIsInitLocationCalled = true;
 	    }
 		
 		// check whether GPS is enabled
-		boolean gpsEnabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-		if ( !gpsEnabled ) 
+		if( mIsPromptGPSEnabled )
 		{
-			// prompt to enabled GPS for better experience
-			AlertDialog.Builder promptActivateGPS = new AlertDialog.Builder( mContext );
-			promptActivateGPS.setMessage("Aktifkan GPS mu biar lebih akurat");
-			
-			promptActivateGPS.setPositiveButton( "OK", new DialogInterface.OnClickListener() 
+			boolean gpsEnabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+			if ( !gpsEnabled ) 
 			{
-			    public void onClick(DialogInterface dialog, int id) 
-			    {
-			    	Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-			    	mContext.startActivity(intent);
-			    }
-			});
-			
-			promptActivateGPS.setNegativeButton( "Cancel", new DialogInterface.OnClickListener() 
-			{
-				public void onClick(DialogInterface dialog, int id) 
-	           	{
-					// User cancelled the dialog
-	           	}
-			});
-	
-			// Create the AlertDialog
-			AlertDialog dialog = promptActivateGPS.create();
-			dialog.show();
-		} 
+				// prompt to enabled GPS for better experience
+				AlertDialog.Builder promptActivateGPS = new AlertDialog.Builder( mContext );
+				promptActivateGPS.setMessage( mActiveGPSmessage );
+				
+				promptActivateGPS.setPositiveButton( "OK", new DialogInterface.OnClickListener() 
+				{
+				    public void onClick(DialogInterface dialog, int id) 
+				    {
+				    	Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+				    	mContext.startActivity(intent);
+				    }
+				});
+				
+				promptActivateGPS.setNegativeButton( "Cancel", new DialogInterface.OnClickListener() 
+				{
+					public void onClick(DialogInterface dialog, int id) 
+		           	{
+						// User cancelled the dialog
+		           	}
+				});
+		
+				// Create the AlertDialog
+				AlertDialog dialog = promptActivateGPS.create();
+				dialog.show();
+			} 
+		}
 		
 	    // Define the criteria how to select the location provider -> use default
-	    mProvider = mLocationManager.getBestProvider( mCriteria, isOnlyUseEnabledProvider );
+	    mProvider = mLocationManager.getBestProvider( mCriteria, mIsOnlyUseEnabledProvider );
 	    mLocation = mLocationManager.getLastKnownLocation( mProvider );
 	    if ( mLocation != null ) 
 	    {
@@ -126,7 +145,7 @@ public class LocationHelper implements LocationListener
 	
 	public void requestUpdateLocation()
 	{
-		if( isInitLocationCalled )
+		if( mIsInitLocationCalled )
 		{
 		    mProvider = mLocationManager.getBestProvider( mCriteria, true );
 			mLocationManager.requestLocationUpdates( mProvider, mIntervalUpdate, mMinimumDistance, this );			
@@ -139,7 +158,7 @@ public class LocationHelper implements LocationListener
 	
 	public void removeUpdateLocation()
 	{
-		if( isInitLocationCalled )
+		if( mIsInitLocationCalled )
 		{
 			mLocationManager.removeUpdates( this );		
 		}
@@ -173,14 +192,14 @@ public class LocationHelper implements LocationListener
 	public void onProviderDisabled(String provider) 
 	{
 		Log.d( TAG , provider + " is disabled" );
-	    mProvider = mLocationManager.getBestProvider( mCriteria, isOnlyUseEnabledProvider );
+	    mProvider = mLocationManager.getBestProvider( mCriteria, mIsOnlyUseEnabledProvider );
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) 
 	{
 		Log.d( TAG , provider + " is enabled" );
-	    mProvider = mLocationManager.getBestProvider( mCriteria, isOnlyUseEnabledProvider );
+	    mProvider = mLocationManager.getBestProvider( mCriteria, mIsOnlyUseEnabledProvider );
 	}
 
 	@Override
@@ -195,26 +214,32 @@ public class LocationHelper implements LocationListener
 		List<Address> addresses = new ArrayList<Address>();
         try
         {
-            Geocoder gcd = new Geocoder( mContext, Locale.getDefault());
-            boolean isGCDAvailable = gcd.isPresent();
-            
-            addresses = gcd.getFromLocation( currentLatitude, currentLongitude, 5 );
-            if (addresses.size() > 0) 
+            boolean isGCDAvailable = Geocoder.isPresent();
+            if( isGCDAvailable )
             {
-                StringBuilder result = new StringBuilder();
-                for(int i = 0; i < addresses.size(); i++)
-                {
-                    Address address =  addresses.get(i);
-                    int maxIndex = address.getMaxAddressLineIndex();
-                    for (int x = 0; x <= maxIndex; x++ ){
-                        result.append(address.getAddressLine(x));
-                        result.append(",");
-                    }               
-                    result.append(address.getLocality());
-                    result.append(",");
-                    result.append(address.getPostalCode());
-                    result.append("\n\n");
-                }
+                Geocoder gcd = new Geocoder( mContext, Locale.getDefault());
+	            addresses = gcd.getFromLocation( currentLatitude, currentLongitude, 5 );
+	            if (addresses.size() > 0) 
+	            {
+	                StringBuilder result = new StringBuilder();
+	                for(int i = 0; i < addresses.size(); i++)
+	                {
+	                    Address address =  addresses.get(i);
+	                    int maxIndex = address.getMaxAddressLineIndex();
+	                    for (int x = 0; x <= maxIndex; x++ ){
+	                        result.append(address.getAddressLine(x));
+	                        result.append(",");
+	                    }               
+	                    result.append(address.getLocality());
+	                    result.append(",");
+	                    result.append(address.getPostalCode());
+	                    result.append("\n\n");
+	                }
+	            }
+            }
+            else
+            {
+            	Log.e( TAG, "GCD is not available" );
             }
         }
         catch(IOException ex)
@@ -299,6 +324,22 @@ public class LocationHelper implements LocationListener
 	      return provider2 == null;
 	    }
 	    return provider1.equals(provider2);
+	}
+	
+	public float distanceFrom(float lat1, float lng1, float lat2, float lng2) 
+	{
+	    double earthRadius = 3958.75;
+	    double dLat = Math.toRadians(lat2-lat1);
+	    double dLng = Math.toRadians(lng2-lng1);
+	    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+	               Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+	               Math.sin(dLng/2) * Math.sin(dLng/2);
+	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	    double dist = earthRadius * c;
+	
+	    int meterConversion = 1609;
+	
+	    return (float) dist * meterConversion;
 	}
 
 }

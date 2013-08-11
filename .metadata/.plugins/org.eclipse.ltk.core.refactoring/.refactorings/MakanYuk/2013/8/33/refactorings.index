@@ -1,0 +1,10 @@
+1376182724338	Rename local variable 'jsonObj'
+1376183878628	Rename method 'extractObject'
+1376195520583	Rename resource 'fragment_search.xml'
+1376199669161	Rename type 'PreferenceActivity'
+1376204692458	Rename field 'onImageChangeListiner'
+1376205202879	Rename field 'isInSearchVenue'
+1376205651825	Rename field 'isOnlyUseEnabledProvider'
+1376205664024	Rename field 'isInitLocationCalled'
+1376205963015	Delete element
+1376207252274	Rename field 'KEY_COUNTER'

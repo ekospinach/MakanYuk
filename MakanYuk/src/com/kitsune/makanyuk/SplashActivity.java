@@ -2,6 +2,8 @@ package com.kitsune.makanyuk;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 
 public class SplashActivity extends Activity
@@ -13,6 +15,7 @@ public class SplashActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView( R.layout.activity_splash );
 		
+		initSharedPreferences();
 		Thread t = new Thread(new Runnable() 
 		{
 			
@@ -24,6 +27,7 @@ public class SplashActivity extends Activity
 					Thread.sleep( 2000 );
 					Intent i = new Intent( SplashActivity.this, MainActivity.class );
 					startActivity(i);
+					finish();
 				} 
 				catch (InterruptedException e) 
 				{
@@ -35,6 +39,18 @@ public class SplashActivity extends Activity
 		t.start();
 	}
 
+	private void initSharedPreferences()
+	{
+		SharedPreferences prefs = ((MakanYukApplication) getApplication()).getPreferences();
+		String limit 	= prefs.getString( getString(R.string.pref_key_venue_limit_search), "10" );
+		String radius 	= prefs.getString( getString(R.string.pref_key_distance), "1000" );
+		
+	    Editor prefsEditor = prefs.edit();
+	    prefsEditor.putBoolean( getString(R.string.pref_key_flag_location_update), true );
+	    prefsEditor.putString( getString(R.string.pref_key_venue_limit_search), limit );
+	    prefsEditor.putString( getString(R.string.pref_key_distance), radius );
+	    prefsEditor.commit();
+	}
 	
 	
 }
