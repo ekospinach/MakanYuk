@@ -13,9 +13,9 @@ A view pager, yes, with an indicator.
 An easy way to implement sliding menus like being used by most popular apps.
 * [Nine-Old-Android](https://github.com/JakeWharton/NineOldAndroids/)
 Android library for using the Honeycomb (Android 3.0) animation API on all versions of the platform back to 1.0. I use this to do some animation and want to ensure it will run on older version.
-[Picasso](http://www.square.github.io/picasso//)
+* [Picasso](http://www.square.github.io/picasso//)
 Picasso help to avoid such a way lenghty code just to download an image and cache., and this one also use small memory. If you want to use another library with more advance configuration, i would suggest you to use [Volley](https://android.googlesource.com/platform/frameworks/volley/).
-[Android Async HTTP](https://www.crittercism.com/)
+* [Android Async HTTP](https://www.crittercism.com/)
 
 Third Party Service
 -------------------------
