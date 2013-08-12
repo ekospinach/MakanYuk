@@ -1,5 +1,7 @@
 package com.kitsune.makanyuk;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -30,6 +32,10 @@ public class AboutActivity extends Activity
 		@Override
 		public void onClick(View v) 
 		{
+			// google analytics
+			EasyTracker.getTracker().sendEvent("ui_action", "button_press", "github_button", null);
+			
+			// flurry
 			((MakanYukApplication) getApplication()).getFlurryInstance().logEvent( "Github Button Click" );
 			
 			String url = "http://makan-yuk.panjigautama.com";
@@ -43,6 +49,11 @@ public class AboutActivity extends Activity
 	protected void onStart() 
 	{
 		super.onStart();
+		
+		// google analytics
+		EasyTracker.getInstance().activityStart( AboutActivity.this );
+		
+		// flurry
 		((MakanYukApplication) getApplication()).getFlurryInstance().startSession( AboutActivity.this );
 	}
 	
@@ -50,6 +61,11 @@ public class AboutActivity extends Activity
 	protected void onStop() 
 	{
 		super.onStop();
+		
+		// google analytics
+		EasyTracker.getInstance().activityStop( AboutActivity.this );
+		
+		// flurry
 		((MakanYukApplication) getApplication()).getFlurryInstance().endSession( AboutActivity.this );
 	}
 

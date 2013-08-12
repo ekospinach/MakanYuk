@@ -33,6 +33,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.kitsune.foursquarehelper.FoursquareHelper;
 import com.kitsune.foursquarehelper.FoursquareHelper.OnRequestVenueDetailListener;
 import com.kitsune.foursquarehelper.FoursquareHelper.OnRequestVenueListener;
@@ -164,6 +165,12 @@ public class MainActivity extends Activity
 	protected void onStart() 
 	{
 		super.onStart();
+		
+		// google analytics
+		EasyTracker.getInstance().setContext( MainActivity.this );
+		EasyTracker.getInstance().activityStart( MainActivity.this );
+		
+		// flurry analytics
 		mMainApplication.getFlurryInstance().startSession( MainActivity.this );
 	}
 	
@@ -171,6 +178,11 @@ public class MainActivity extends Activity
 	protected void onStop() 
 	{
 		super.onStop();
+		
+		// google analytics
+		EasyTracker.getInstance().activityStop( MainActivity.this );
+		
+		// flurry analytics
 		mMainApplication.getFlurryInstance().endSession( MainActivity.this );
 	}
 	
@@ -217,6 +229,9 @@ public class MainActivity extends Activity
 				flurryParam.put( "limit", Integer.toString( mFoursquareHelper.getLimit() ) );
 				flurryParam.put( "radius", Integer.toString(mFoursquareHelper.getRadius() ) );
 				mMainApplication.getFlurryInstance().logEvent( "Search Venue", flurryParam );
+				
+				// google analytics
+				EasyTracker.getTracker().send( "search_venue", flurryParam );
 			}
 			
 		}
@@ -291,6 +306,9 @@ public class MainActivity extends Activity
 			flurryParam.put( "sub-admin", 	subAdmin );
 			flurryParam.put( "country", 	addresses.get(0).getCountryName() );
 			mMainApplication.getFlurryInstance().logEvent( "Location", flurryParam );
+			
+			// google analytics
+			EasyTracker.getTracker().send( "update_location", flurryParam );
 
 		}
 		else
@@ -308,9 +326,14 @@ public class MainActivity extends Activity
 			float distance = mLocHelper.distanceFrom( (float)mCurrentLocation.getLatitude(), (float)mCurrentLocation.getLongitude(), Float.parseFloat(mFoundedVenue.getLocationLatitude()), Float.parseFloat(mFoundedVenue.getLocationLongitude()) );
 		 	mDistanceText.setText( (int) distance + " " + getString(R.string.some_meter_away) );
 		 	
+		 	// flurry
 			Map<String, String> flurryParam = new HashMap<String,String>(1);
 			flurryParam.put( "distance", Float.toString(distance) );
 			mMainApplication.getFlurryInstance().logEvent( "Distance", flurryParam );
+			
+			// google analytics
+			EasyTracker.getTracker().send( "distance", flurryParam );
+
 		}
 	}
 	
@@ -333,6 +356,10 @@ public class MainActivity extends Activity
 					flurryParam.put( "provider", location.getProvider() );
 					flurryParam.put( "accuracy", Float.toString(location.getAccuracy()) );
 					mMainApplication.getFlurryInstance().logEvent( "Location Updater", flurryParam );
+					
+					// google analytics
+					EasyTracker.getTracker().send( "location_updater", flurryParam );
+
 				}
 				else
 				{
@@ -391,7 +418,8 @@ public class MainActivity extends Activity
 					mFoundedVenue = venues.get( position );
 					updateLocation( mCurrentLocation, mAddresses );
 					
-					showUpVenue();					
+					showUpVenue();	
+					
 					// get venue detail
 					mFoursquareHelper.getVenueDetail( mFoundedVenue.getId() );
 					
@@ -400,6 +428,9 @@ public class MainActivity extends Activity
 					flurryParam.put( "venue id", mFoundedVenue.getId() );
 					flurryParam.put( "venue name", mFoundedVenue.getName() );
 					mMainApplication.getFlurryInstance().logEvent( "Search Venue Success", flurryParam );
+					
+					// google analytics
+					EasyTracker.getTracker().send( "venue_founded", flurryParam );
 					
 					highlightImageStageWithOverlay( true );
 
@@ -427,7 +458,13 @@ public class MainActivity extends Activity
 				animate(mImageStage).cancel();
 				isOnSearchVenue = false;
 			}
+			
+			// flurry
 			mMainApplication.getFlurryInstance().logEvent( "Search Venue Failed" );
+			
+			// google analytics
+			EasyTracker.getTracker().sendEvent("foursquare_helper", "search_venue", "failed", null);
+
 		}
 	};
 	
@@ -451,15 +488,24 @@ public class MainActivity extends Activity
 				}
 			}
 			
+			
+			// flurry
 			mMainApplication.getFlurryInstance().logEvent( "GetVenue Detail Success" );
 			
+			// google analytics
+			EasyTracker.getTracker().sendEvent("foursquare_helper", "get_venue", "success", null);
 		}
 		
 		@Override
 		public void onFetchFailed(String response) 
 		{
 			mMainApplication.debugToast( response );
+			
+			// flurry
 			mMainApplication.getFlurryInstance().logEvent( "GetVenue Detail Failed" );
+			
+			// google analytics
+			EasyTracker.getTracker().sendEvent("foursquare_helper", "get_venue", "Failed", null);
 		}
 	};
 
@@ -601,6 +647,10 @@ public class MainActivity extends Activity
 		@Override
 		public void onClick(View v) 
 		{
+			// google analytics
+			EasyTracker.getTracker().sendEvent("ui_action", "button_press", "location_button", null);
+			
+			// flurry
 			mMainApplication.getFlurryInstance().logEvent( "Get Direction Button Click" );
 			
 			String start_address 		= "saddr=" + mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude();
@@ -619,6 +669,10 @@ public class MainActivity extends Activity
 		@Override
 		public void onClick(View v)
 		{
+			// google analytics
+			EasyTracker.getTracker().sendEvent("ui_action", "button_press", "share_button", null);
+			
+			// flurry
 			mMainApplication.getFlurryInstance().logEvent( "Share Button Click" );
 			
 			Intent emailIntent = new Intent();
@@ -707,6 +761,10 @@ public class MainActivity extends Activity
 		{
 			if( mFoundedVenue != null && mFoundedVenue.getCanonicalUrl() != null )
 			{
+				// google analytics
+				EasyTracker.getTracker().sendEvent("ui_action", "button_press", "foursquare_button", null);
+				
+				// flurry
 				mMainApplication.getFlurryInstance().logEvent( "Foursquare Button Click" );
 				
 				String url = mFoundedVenue.getCanonicalUrl();

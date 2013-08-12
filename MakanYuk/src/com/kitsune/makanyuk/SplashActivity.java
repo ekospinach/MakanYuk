@@ -2,9 +2,9 @@ package com.kitsune.makanyuk;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+
+import com.google.analytics.tracking.android.EasyTracker;
 
 public class SplashActivity extends Activity
 {
@@ -42,6 +42,9 @@ public class SplashActivity extends Activity
 	protected void onStart() 
 	{
 		super.onStart();
+		// google analytics
+		EasyTracker.getInstance().activityStart( SplashActivity.this);
+		// flurry
 		((MakanYukApplication) getApplication()).getFlurryInstance().startSession( SplashActivity.this );
 	}
 	
@@ -49,6 +52,9 @@ public class SplashActivity extends Activity
 	protected void onStop() 
 	{
 		super.onStop();
+		// google analytics
+		EasyTracker.getInstance().activityStop( SplashActivity.this );
+		// flurry
 		((MakanYukApplication) getApplication()).getFlurryInstance().endSession( SplashActivity.this );
 	}
 

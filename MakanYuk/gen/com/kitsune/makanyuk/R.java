@@ -1086,6 +1086,15 @@ containing a value of this type.
         public static final int default_line_indicator_centered=0x7f060008;
         public static final int default_title_indicator_selected_bold=0x7f060009;
         public static final int default_underline_indicator_fades=0x7f06000a;
+        /** Enable automatic activity tracking
+         */
+        public static final int ga_autoActivityTracking=0x7f06000b;
+        /** Set debug mode
+         */
+        public static final int ga_debug=0x7f06000d;
+        /** Enable automatic exception tracking
+         */
+        public static final int ga_reportUncaughtExceptions=0x7f06000c;
     }
     public static final class color {
         public static final int abs__background_holo_dark=0x7f070000;
@@ -1578,35 +1587,44 @@ containing a value of this type.
  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f0a0007;
-        public static final int action_settings=0x7f0a0010;
-        public static final int activate_your_gps=0x7f0a0019;
-        public static final int app_name=0x7f0a000d;
-        public static final int default_locale=0x7f0a000f;
-        public static final int find_location=0x7f0a0013;
-        public static final int find_location_not_found=0x7f0a0014;
-        public static final int find_on_github=0x7f0a0011;
-        public static final int find_your_location=0x7f0a0015;
-        public static final int main_text=0x7f0a0012;
-        public static final int nutshell=0x7f0a000e;
-        public static final int pref_key_distance=0x7f0a0020;
-        public static final int pref_key_flag_location_update=0x7f0a001d;
-        public static final int pref_key_language=0x7f0a0026;
-        public static final int pref_key_venue_limit_search=0x7f0a0023;
-        public static final int pref_summary_distance=0x7f0a001e;
-        public static final int pref_summary_language=0x7f0a0024;
+        public static final int action_settings=0x7f0a0015;
+        public static final int activate_your_gps=0x7f0a001e;
+        public static final int app_name=0x7f0a0012;
+        /** The screen names that will appear in reporting
+         */
+        public static final int com_kitsune_AboutActivity=0x7f0a000e;
+        public static final int com_kitsune_MainActivity=0x7f0a000f;
+        public static final int com_kitsune_SettingActivity=0x7f0a0010;
+        public static final int com_kitsune_SplashActivity=0x7f0a0011;
+        public static final int default_locale=0x7f0a0014;
+        public static final int find_location=0x7f0a0018;
+        public static final int find_location_not_found=0x7f0a0019;
+        public static final int find_on_github=0x7f0a0016;
+        public static final int find_your_location=0x7f0a001a;
+        /** tracking ID
+         */
+        public static final int ga_trackingId=0x7f0a000d;
+        public static final int main_text=0x7f0a0017;
+        public static final int nutshell=0x7f0a0013;
+        public static final int pref_key_distance=0x7f0a0025;
+        public static final int pref_key_flag_location_update=0x7f0a0022;
+        public static final int pref_key_language=0x7f0a002b;
+        public static final int pref_key_venue_limit_search=0x7f0a0028;
+        public static final int pref_summary_distance=0x7f0a0023;
+        public static final int pref_summary_language=0x7f0a0029;
         /**  preferences screen  
  preferences screen  
          */
-        public static final int pref_summary_location_update_flag=0x7f0a001b;
-        public static final int pref_summary_venue_limit_search=0x7f0a0021;
-        public static final int pref_title_distance=0x7f0a001f;
-        public static final int pref_title_language=0x7f0a0025;
-        public static final int pref_title_location_update_flag=0x7f0a001c;
-        public static final int pref_title_venue_limit_search=0x7f0a0022;
-        public static final int resolving_address=0x7f0a001a;
-        public static final int share_message=0x7f0a0018;
-        public static final int share_subject=0x7f0a0017;
-        public static final int some_meter_away=0x7f0a0016;
+        public static final int pref_summary_location_update_flag=0x7f0a0020;
+        public static final int pref_summary_venue_limit_search=0x7f0a0026;
+        public static final int pref_title_distance=0x7f0a0024;
+        public static final int pref_title_language=0x7f0a002a;
+        public static final int pref_title_location_update_flag=0x7f0a0021;
+        public static final int pref_title_venue_limit_search=0x7f0a0027;
+        public static final int resolving_address=0x7f0a001f;
+        public static final int share_message=0x7f0a001d;
+        public static final int share_subject=0x7f0a001c;
+        public static final int some_meter_away=0x7f0a001b;
     }
     public static final class style {
         /** 

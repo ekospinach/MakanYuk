@@ -1,5 +1,7 @@
 package com.kitsune.makanyuk;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -30,7 +32,12 @@ public class SettingActivity extends PreferenceActivity
 					((MakanYukApplication) getApplication()).setLanguage(locale);
 				}
 				
-				String value = mPrefs.getString( key, "default not found" );				    
+				String value = mPrefs.getString( key, "default not found" );		
+				
+				// google analytics
+				
+				
+				// flurry
 				((MakanYukApplication) getApplication()).getFlurryInstance().logEvent( "Change pref : " + key + " to : " + value );
 			}
 			
@@ -44,6 +51,9 @@ public class SettingActivity extends PreferenceActivity
 	protected void onStart() 
 	{
 		super.onStart();
+		// google analytics
+		EasyTracker.getInstance().activityStart( SettingActivity.this );
+		// flurry analytics
 		((MakanYukApplication) getApplication()).getFlurryInstance().startSession( SettingActivity.this );
 	}
 	
@@ -51,6 +61,9 @@ public class SettingActivity extends PreferenceActivity
 	protected void onStop() 
 	{
 		super.onStop();
+		// google analytics
+		EasyTracker.getInstance().activityStop( SettingActivity.this );
+		// flurry analytics
 		((MakanYukApplication) getApplication()).getFlurryInstance().endSession( SettingActivity.this );
 	}
     
