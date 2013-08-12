@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kitsune.makanyuk"
-    android:versionCode="1"
+    android:versionCode="2"
     android:versionName="beta" >
+    
+    <!-- PERMISSIONS  -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <!-- needed by : crittercism  -->
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    
+    <uses-feature android:name="android.hardware.location" android:required="true" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+    <uses-feature android:name="android.hardware.sensor.accelerometer" />
 
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
     
-    <!-- PERMISSIONS  -->
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.VIBRATE"/>
-	
-    <!-- needed by : crittercism  -->
-	<uses-permission android:name="android.permission.READ_LOGS"/>
-	<uses-permission android:name="android.permission.GET_TASKS"/>
-
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	
-	<uses-feature android:name="android.hardware.location" android:required="true" />
-	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
-	<uses-feature android:name="android.hardware.sensor.accelerometer" />
-	
     <application
         android:name="com.kitsune.makanyuk.MakanYukApplication"
         android:allowBackup="true"

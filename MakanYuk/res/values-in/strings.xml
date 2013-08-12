@@ -16,6 +16,7 @@
     <string name="share_subject">Ayo makan disini !</string>
     <string name="share_message">yuk makan di </string>
     <string name="activate_your_gps">Hidupkan GPS mu untuk menambah akurasi</string>
+    <string name="resolving_address">Lokasi ditemukan, mencari alamat &#8230;</string>
     
 	<!-- preferences screen  -->
 	<string name="pref_summary_location_update_flag">Selalu perbaharui lokasi</string>

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.kitsune.thirdlib.ReverseGeocodeHelper.OnReverseGeocode;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -34,6 +36,7 @@ public class LocationHelper implements LocationListener
 	private Criteria mCriteria;
 	private LocationManager mLocationManager;
 	private OnGetLocationListener mGetLocationListener;
+	private ReverseGeocodeHelper mReverseGeocodeHelper;
 
 	private boolean mIsOnlyUseEnabledProvider 	 = true;
 	private boolean mIsPromptGPSEnabled 		 = true;
@@ -52,6 +55,9 @@ public class LocationHelper implements LocationListener
 		mCriteria.setAccuracy(Criteria.ACCURACY_FINE);
 		
 		mLocationManager = (LocationManager) mContext.getSystemService( Context.LOCATION_SERVICE );
+    	mReverseGeocodeHelper = new ReverseGeocodeHelper();
+    	
+    	mReverseGeocodeHelper.setOnReverseGeocodeListener( reverseGeocodeListener );
 	}
 	
 	public void setPromptActivateGPS( boolean enabled )
@@ -76,7 +82,7 @@ public class LocationHelper implements LocationListener
 	
 	public interface OnGetLocationListener 
 	{
-		void onLocationUpdate( Location location );
+		void onLocationUpdate( Location location, List<Address> addresses );
 	}
 	
 	public Location getLocation()
@@ -180,7 +186,7 @@ public class LocationHelper implements LocationListener
 		// pass them to activity
 	    if( mGetLocationListener != null )
 	    {
-	    	mGetLocationListener.onLocationUpdate( mLocation );
+	    	mGetLocationListener.onLocationUpdate( mLocation, null );
 	    }
 	    else
 	    {
@@ -239,7 +245,8 @@ public class LocationHelper implements LocationListener
             }
             else
             {
-            	Log.e( TAG, "GCD is not available" );
+            	Log.e( TAG, "GCD is not available, switch to reverse geocode helper" );
+            	mReverseGeocodeHelper.reverseGeocode(currentLatitude, currentLongitude, false);
             }
         }
         catch(IOException ex)
@@ -341,5 +348,22 @@ public class LocationHelper implements LocationListener
 	
 	    return (float) dist * meterConversion;
 	}
-
+	
+	private OnReverseGeocode reverseGeocodeListener = new OnReverseGeocode() 
+	{
+					
+			@Override
+			public void onSuccess(List<Address> addresses) 
+			{
+				mGetLocationListener.onLocationUpdate( mLocation, addresses );
+			}
+			
+			@Override
+			public void onFailed(String message) 
+			{
+				Log.e( TAG, message );
+			}
+			
+	};
+	
 }

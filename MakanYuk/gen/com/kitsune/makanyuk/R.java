@@ -1454,7 +1454,7 @@ containing a value of this type.
         public static final int fullscreen=0x7f050013;
         public static final int githubButton=0x7f05003d;
         public static final int homeAsUp=0x7f050006;
-        public static final int imageLogoCorner=0x7f05004d;
+        public static final int imageLogoCorner=0x7f05004c;
         public static final int imageView3=0x7f05004e;
         public static final int left=0x7f050010;
         public static final int listMode=0x7f050002;
@@ -1467,7 +1467,7 @@ containing a value of this type.
         public static final int margin=0x7f050012;
         public static final int none=0x7f050015;
         public static final int normal=0x7f050001;
-        public static final int nutshellText=0x7f05004c;
+        public static final int nutshellText=0x7f05004d;
         public static final int right=0x7f050011;
         public static final int selected_view=0x7f050014;
         public static final int settingButton=0x7f050048;
@@ -1588,21 +1588,22 @@ containing a value of this type.
         public static final int find_your_location=0x7f0a0015;
         public static final int main_text=0x7f0a0012;
         public static final int nutshell=0x7f0a000e;
-        public static final int pref_key_distance=0x7f0a001f;
-        public static final int pref_key_flag_location_update=0x7f0a001c;
-        public static final int pref_key_language=0x7f0a0025;
-        public static final int pref_key_venue_limit_search=0x7f0a0022;
-        public static final int pref_summary_distance=0x7f0a001d;
-        public static final int pref_summary_language=0x7f0a0023;
+        public static final int pref_key_distance=0x7f0a0020;
+        public static final int pref_key_flag_location_update=0x7f0a001d;
+        public static final int pref_key_language=0x7f0a0026;
+        public static final int pref_key_venue_limit_search=0x7f0a0023;
+        public static final int pref_summary_distance=0x7f0a001e;
+        public static final int pref_summary_language=0x7f0a0024;
         /**  preferences screen  
  preferences screen  
          */
-        public static final int pref_summary_location_update_flag=0x7f0a001a;
-        public static final int pref_summary_venue_limit_search=0x7f0a0020;
-        public static final int pref_title_distance=0x7f0a001e;
-        public static final int pref_title_language=0x7f0a0024;
-        public static final int pref_title_location_update_flag=0x7f0a001b;
-        public static final int pref_title_venue_limit_search=0x7f0a0021;
+        public static final int pref_summary_location_update_flag=0x7f0a001b;
+        public static final int pref_summary_venue_limit_search=0x7f0a0021;
+        public static final int pref_title_distance=0x7f0a001f;
+        public static final int pref_title_language=0x7f0a0025;
+        public static final int pref_title_location_update_flag=0x7f0a001c;
+        public static final int pref_title_venue_limit_search=0x7f0a0022;
+        public static final int resolving_address=0x7f0a001a;
         public static final int share_message=0x7f0a0018;
         public static final int share_subject=0x7f0a0017;
         public static final int some_meter_away=0x7f0a0016;

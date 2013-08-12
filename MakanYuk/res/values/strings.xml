@@ -16,6 +16,7 @@
     <string name="share_subject">Lets eat here !</string>
     <string name="share_message">hey guys, lets eat at </string>
     <string name="activate_your_gps">Turn on your gps for better experience</string>
+    <string name="resolving_address">Location found, resolving address &#8230;</string>
     
 	<!-- preferences screen  -->
 	<string name="pref_summary_location_update_flag">always update your location to the latest position</string>

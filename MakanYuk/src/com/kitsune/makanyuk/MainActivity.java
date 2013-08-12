@@ -228,17 +228,55 @@ public class MainActivity extends Activity
 		mCurrentLocation = location;
 		if( addresses.size() > 0 )
 		{
+			String locationStr = "";
 			String delimiter = ";";
 			
-			Address addr = addresses.get(0);
+			// get locality
+			int len = addresses.size();
 			
-			String locationStr = "";
-			if( addr.getLocality() != null )
-				locationStr += addr.getLocality();
-			if( addr.getFeatureName() != null && addr.getFeatureName().length() > 1 )
-				locationStr += delimiter + addr.getFeatureName();
-			if( addr.getSubAdminArea() != null )
-				locationStr += delimiter + addr.getSubAdminArea();
+			// get locality
+			String locality = "";
+			for( int i = 0; i < len; i++ )
+			{
+				Address addr = addresses.get(i);
+				if( addr.getLocality() != null && addr.getLocality().length() > 1 )
+				{
+					locality = addr.getLocality();
+					locationStr += locality;
+					break;
+				}
+			}
+			
+			// get feature
+			String featureName = "";
+			for( int i = 0; i < len; i++ )
+			{
+				Address addr = addresses.get(i);
+				if( addr.getFeatureName() != null && addr.getFeatureName().length() > 1 )
+				{
+					featureName = addr.getFeatureName();
+					locationStr += delimiter + featureName;
+					break;
+				}
+			}
+			
+			// last resort... get sub admin area
+			String subAdmin = "";
+			if( locationStr.length() == 0 )
+			{
+				for( int i = 0; i < len; i++ )
+				{
+					Address addr = addresses.get(i);
+					if( addr.getFeatureName() != null && addr.getFeatureName().length() > 1 )
+					{
+						subAdmin = addr.getSubAdminArea();
+						locationStr += delimiter + subAdmin;
+						break;
+					}
+				}
+			}
+			
+			// cleanup string
 			if( locationStr.charAt(0) == delimiter.charAt(0) )
 				locationStr = locationStr.substring( 1 );
 			locationStr = locationStr.trim();
@@ -247,16 +285,19 @@ public class MainActivity extends Activity
 			mLocationText.setText( locationStr );
 			
 			// flurry
-			Map<String, String> flurryParam = new HashMap<String,String>(5);
-			flurryParam.put( "locality", addr.getLocality() );
-			flurryParam.put( "feature", addr.getFeatureName() );
-			flurryParam.put( "sub-admin", addr.getSubAdminArea() );
-			flurryParam.put( "country", addr.getCountryName() );
-			flurryParam.put( "postal code", addr.getPostalCode() );
-
+			Map<String, String> flurryParam = new HashMap<String,String>(4);
+			flurryParam.put( "locality", 	locality );
+			flurryParam.put( "feature", 	featureName );
+			flurryParam.put( "sub-admin", 	subAdmin );
+			flurryParam.put( "country", 	addresses.get(0).getCountryName() );
 			mMainApplication.getFlurryInstance().logEvent( "Location", flurryParam );
 
 		}
+		else
+		{
+			mLocationText.setText( getString(R.string.resolving_address) );
+		}
+		
 	}
 	
 	void updateDistance()
@@ -278,19 +319,27 @@ public class MainActivity extends Activity
 	{
 		
 		@Override
-		public void onLocationUpdate(Location location) 
+		public void onLocationUpdate(Location location, List<Address> addresses ) 
 		{
 			if( location != null )
 			{
-				mAddresses = mLocHelper.getCurrentAddress();
-				updateLocation( location, mAddresses );
+				if( addresses == null )
+				{
+					mAddresses = mLocHelper.getCurrentAddress();
+					updateLocation( location, mAddresses );
+					
+					// flurry
+					Map<String, String> flurryParam = new HashMap<String,String>(2);
+					flurryParam.put( "provider", location.getProvider() );
+					flurryParam.put( "accuracy", Float.toString(location.getAccuracy()) );
+					mMainApplication.getFlurryInstance().logEvent( "Location Updater", flurryParam );
+				}
+				else
+				{
+					mAddresses = addresses;
+					updateLocation( location, mAddresses );
+				}
 				
-				// flurry
-				Map<String, String> flurryParam = new HashMap<String,String>(2);
-				flurryParam.put( "provider", location.getProvider() );
-				flurryParam.put( "accuracy", Float.toString(location.getAccuracy()) );
-				mMainApplication.getFlurryInstance().logEvent( "Location Updater", flurryParam );
-
 			}
 		}
 	};
