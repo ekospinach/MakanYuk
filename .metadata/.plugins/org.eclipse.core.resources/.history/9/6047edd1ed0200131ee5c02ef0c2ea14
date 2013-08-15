@@ -1,0 +1,22 @@
+package com.kitsune.thirdlib;
+
+import android.content.Context;
+
+/**
+ * this helper is intend to reverse geocode into addresses using google maps API v3
+ * @author panjigautama
+ *
+ */
+public class ReverseGeocodeHelper 
+{
+
+	Context mContext;
+	
+	public ReverseGeocodeHelper( Context context )
+	{
+		mContext = context;
+	}
+	
+	
+	
+}

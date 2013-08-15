@@ -3,7 +3,7 @@
 
     <string name="app_name">Makan Yuk!</string>
     <string name="nutshell">cari tempat makan, ga pake lama</string>
-   	<string name="default_locale">in</string>
+   	<string name="default_locale">en</string>
 
    	<string name="action_settings">Pengaturan</string>
     <string name="find_on_github">kode sumber bisa kamu dapatkan di github</string>

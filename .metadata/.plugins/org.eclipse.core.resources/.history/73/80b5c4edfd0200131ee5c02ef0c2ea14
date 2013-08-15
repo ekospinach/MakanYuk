@@ -1,0 +1,240 @@
+package com.kitsune.thirdlib;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import android.content.Context;
+import android.location.Address;
+import android.util.Log;
+
+/**
+ * this helper is intend to reverse geocode into addresses using google maps API v3, as an alternative from geocoder class if it is failing
+ * networking is use library from http://loopj.com/android-async-http/
+ * @author panjigautama
+ *
+ */
+public class ReverseGeocodeHelper 
+{
+
+	private final String TAG = "ReverseGeocodeHelper";
+	
+	private Context mContext;
+	private final String MAP_API_URL 	= "http://maps.googleapis.com/maps/api/geocode/json?";
+	private final String PARAM_LATLON 	= "latlng";
+	private final String PARAM_SENSOR 	= "sensor";
+	
+	private AsyncHttpClient mHttpClient;
+	private OnReverseGeocode mListener;
+	
+	public ReverseGeocodeHelper( Context context )
+	{
+		mContext = context;
+		mHttpClient = new AsyncHttpClient();
+	}
+	
+	public void setOnReverseGeocodeListener( OnReverseGeocode listener )
+	{
+		mListener = listener;
+	}
+	
+	public interface OnReverseGeocode
+	{
+		void onSuccess( List<Address> addresses );
+		void onFailed( String message );
+	}
+	
+	public void reverseGeocode( int latitude, int longitude, boolean useSensor )
+	{
+		// set params
+		RequestParams param = new RequestParams();
+		param.put(PARAM_LATLON, latitude+","+longitude);
+		param.put(PARAM_SENSOR, ""+useSensor );
+		
+		mHttpClient.get( MAP_API_URL, param, new AsyncHttpResponseHandler()
+		{
+
+			@Override
+			public void onFailure(Throwable throwable, String message) 
+			{
+				String msg = "Reverse geocode failed. " + message;
+				Log.e( TAG, msg );
+				mListener.onFailed( msg );
+			}
+
+			@Override
+			public void onSuccess( String response ) 
+			{
+				
+				try 
+				{
+					List<Address> results = new ArrayList<Address>();
+					
+					JSONObject responseObj = new JSONObject( response );
+					
+					String responseCode = responseObj.getString( "status" );
+					if( responseCode.equalsIgnoreCase("OK") )
+					{
+						
+						JSONArray addresses = responseObj.getJSONArray( "results" );
+						int counter = 0;
+						int len = addresses.length();
+						while( counter < len )
+						{
+							Address address = new Address( Locale.ENGLISH );
+							JSONObject addressObj = addresses.getJSONObject(counter);
+							
+							// address components
+							JSONArray addressComponentsObj = extractJSONArrayValue( addressObj, "address_components" );
+							if( addressComponentsObj.length() > 0 )
+							{
+								int counterAddressComponents = 0;
+								int lengthAddressComponents = addressComponentsObj.length();
+								while( counterAddressComponents < lengthAddressComponents )
+								{
+									JSONObject addressComponent = addressComponentsObj.getJSONObject(counterAddressComponents);
+									String long_name = extractStringValue(addressComponent, "long_name");
+									if( long_name != null )
+									{
+										address.setAddressLine(counterAddressComponents, long_name);
+									}
+								}
+							}
+							
+							// geometry
+							JSONObject geometryObj = extractJSONObjectValue(addressObj, "geometry");
+							JSONObject locationObj = extractJSONObjectValue(geometryObj, "location");
+							double latitude 	= extractDoubleValue(locationObj, "lat");
+							double longitude 	= extractDoubleValue(locationObj, "lng");
+							address.setLongitude(latitude);
+							address.setLongitude(longitude);
+							
+							// formatted address
+							String formatted_address = extractStringValue(addressObj, "formatted_address");
+							address.setFeatureName( formatted_address );
+							
+							// location type
+							String location_type = extractStringValue(geometryObj, "formatted_address");
+							address.setPremises(location_type);
+							
+							// put to results
+							results.add(address);
+							
+							counter++;
+						}
+						
+						mListener.onSuccess(results);
+					}
+					else
+					{
+						String message = "Reverse geocode failed, response code " + responseCode;
+						Log.e( TAG, message );
+						mListener.onFailed( message );
+					}
+					
+				} 
+				catch (JSONException e) 
+				{
+					String message = "Reverse geocode failed, response is not valid";
+					Log.e( TAG, message );
+					mListener.onFailed( message );
+				}
+				
+			}
+			
+		});
+	}
+	
+	private int extractIntValue( JSONObject jsonObj, String key )
+	{
+		int value = 0;
+		try
+		{
+			value = jsonObj.getInt(key);
+		}
+		catch( JSONException e )
+		{
+			Log.e( TAG, key + " value is not found" );
+		}
+		return value;
+	}
+	
+	private String extractStringValue( JSONObject jsonObj, String key )
+	{
+		String value = null;
+		try
+		{
+			value = jsonObj.getString(key);
+		}
+		catch( JSONException e )
+		{
+			Log.e( TAG, key + " value is not found" );
+		}
+		return value;
+	}
+	
+	private boolean extractBooleanValue( JSONObject jsonObj, String key )
+	{
+		boolean value = false;
+		try
+		{
+			value = jsonObj.getBoolean(key);
+		}
+		catch( JSONException e )
+		{
+			Log.e( TAG, key + " value is not found" );
+		}
+		return value;
+	}
+	
+	private JSONObject extractJSONObjectValue( JSONObject jsonObj, String key )
+	{
+		JSONObject value = null;
+		try
+		{
+			value = jsonObj.getJSONObject(key);
+		}
+		catch( JSONException e )
+		{
+			Log.e( TAG, key + " object is not found" );
+		}
+		return value;
+	}
+	
+	private JSONArray extractJSONArrayValue( JSONObject jsonObj, String key )
+	{
+		JSONArray value = null;
+		try
+		{
+			value = jsonObj.getJSONArray(key);
+		}
+		catch( JSONException e )
+		{
+			Log.e( TAG, key + " object is not found" );
+		}
+		return value;
+	}
+	
+	private double extractDoubleValue(JSONObject jsonObj, String key)
+	{
+		double value = 0;
+		try
+		{
+			value = jsonObj.getDouble(key);
+		}
+		catch( JSONException e )
+		{
+			Log.e( TAG, key + " object is not found" );
+		}
+		return value;
+	}
+	
+}

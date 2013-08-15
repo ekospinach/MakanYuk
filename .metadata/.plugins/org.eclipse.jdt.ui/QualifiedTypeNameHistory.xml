@@ -3,8 +3,6 @@
 <fullyQualifiedTypeName name="com.kitsune.foursquarehelper.Venue"/>
 <fullyQualifiedTypeName name="com.kitsune.foursquarehelper.FoursquareHelper.OnRequestVenueDetailListener"/>
 <fullyQualifiedTypeName name="com.squareup.picasso.Picasso"/>
-<fullyQualifiedTypeName name="org.json.JSONArray"/>
-<fullyQualifiedTypeName name="org.json.JSONObject"/>
 <fullyQualifiedTypeName name="com.nineoldandroids.animation.Animator.AnimatorListener"/>
 <fullyQualifiedTypeName name="com.nineoldandroids.animation.AnimatorListenerAdapter"/>
 <fullyQualifiedTypeName name="com.kitsune.foursquarehelper.PhotosItem"/>
@@ -14,7 +12,6 @@
 <fullyQualifiedTypeName name="com.kitsune.makanyuk.R.drawable"/>
 <fullyQualifiedTypeName name="android.preference.PreferenceActivity"/>
 <fullyQualifiedTypeName name="com.kitsune.makanyuk.R.xml"/>
-<fullyQualifiedTypeName name="com.kitsune.makanyuk.SettingActivity"/>
 <fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
 <fullyQualifiedTypeName name="com.kitsune.makanyuk.R.layout"/>
 <fullyQualifiedTypeName name="android.widget.ImageButton"/>
@@ -37,4 +34,17 @@
 <fullyQualifiedTypeName name="java.lang.Override"/>
 <fullyQualifiedTypeName name="com.kitsune.makanyuk.MakanYukApplication"/>
 <fullyQualifiedTypeName name="com.kitsune.makanyuk.R.id"/>
+<fullyQualifiedTypeName name="com.loopj.android.http.AsyncHttpClient"/>
+<fullyQualifiedTypeName name="com.loopj.android.http.RequestParams"/>
+<fullyQualifiedTypeName name="com.loopj.android.http.AsyncHttpResponseHandler"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.util.Locale"/>
+<fullyQualifiedTypeName name="org.json.JSONArray"/>
+<fullyQualifiedTypeName name="org.json.JSONObject"/>
+<fullyQualifiedTypeName name="com.kitsune.thirdlib.ReverseGeocodeHelper"/>
+<fullyQualifiedTypeName name="android.location.Address"/>
+<fullyQualifiedTypeName name="com.kitsune.thirdlib.ReverseGeocodeHelper.OnReverseGeocode"/>
+<fullyQualifiedTypeName name="com.kitsune.makanyuk.SplashActivity"/>
+<fullyQualifiedTypeName name="com.kitsune.makanyuk.SettingActivity"/>
 </qualifiedTypeNameHistroy>

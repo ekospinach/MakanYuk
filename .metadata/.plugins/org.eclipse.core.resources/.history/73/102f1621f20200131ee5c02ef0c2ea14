@@ -1,0 +1,109 @@
+package com.kitsune.thirdlib;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import android.content.Context;
+import android.location.Address;
+import android.util.Log;
+
+/**
+ * this helper is intend to reverse geocode into addresses using google maps API v3, as alternative from geocoder class provided in android
+ * networking is use library from http://loopj.com/android-async-http/
+ * @author panjigautama
+ *
+ */
+public class ReverseGeocodeHelper 
+{
+
+	private final String TAG = "ReverseGeocodeHelper";
+	
+	private Context mContext;
+	private final String MAP_API_URL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=-7.7603493,110.4130677&sensor=false";
+	private final String PARAM_LATLON = "latlng";
+	private AsyncHttpClient mHttpClient;
+	private OnReverseGeocode mListener;
+	
+	public ReverseGeocodeHelper( Context context )
+	{
+		mContext = context;
+		mHttpClient = new AsyncHttpClient();
+	}
+	
+	public void setOnReverseGeocodeListener( OnReverseGeocode listener )
+	{
+		mListener = listener;
+	}
+	
+	public interface OnReverseGeocode
+	{
+		void onSuccess( List<Address> addresses );
+		void onFailed( String message );
+	}
+	
+	public void reverseGeocode( int latitude, int longitude )
+	{
+		RequestParams param = new RequestParams();
+		mHttpClient.get( MAP_API_URL, param, new AsyncHttpResponseHandler()
+		{
+
+			@Override
+			public void onFailure(Throwable throwable, String message) 
+			{
+				
+			}
+
+			@Override
+			public void onSuccess( String response ) 
+			{
+				
+				try 
+				{
+					List<Address> results = new ArrayList<Address>();
+					
+					JSONObject responseObj = new JSONObject( response );
+					
+					String responseCode = responseObj.getString( "status" );
+					if( responseCode.equalsIgnoreCase("OK") )
+					{
+						
+						JSONArray addresses = responseObj.getJSONArray( "results" );
+						int counter = 0;
+						int len = addresses.length();
+						while( counter < len )
+						{
+							
+							
+							counter++;
+						}
+						
+					}
+					else
+					{
+						String message = "Reverse geocode failed, response code " + responseCode;
+						Log.e( TAG, message );
+						mListener.onFailed( message );
+					}
+					
+				} 
+				catch (JSONException e) 
+				{
+					String message = "Reverse geocode failed, response is not valid";
+					Log.e( TAG, message );
+					mListener.onFailed( message );
+				}
+				
+			}
+			
+		});
+	}
+	
+}

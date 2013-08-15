@@ -1,0 +1,34 @@
+package com.kitsune.thirdlib;
+
+import android.content.Context;
+
+/**
+ * this helper is intend to reverse geocode into addresses using google maps API v3, as alternative from geocoder class provided in android
+ * networking is use library from http://loopj.com/android-async-http/
+ * @author panjigautama
+ *
+ */
+public class ReverseGeocodeHelper 
+{
+
+	private Context mContext;
+	private final String MAP_API_URL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=-7.7603493,110.4130677&sensor=false";
+	private final String PARAM_LATLON = "latlng";
+	
+	public ReverseGeocodeHelper( Context context )
+	{
+		mContext = context;
+	}
+	
+	public interface OnReverseGeocode
+	{
+		void onSuccess();
+		void onFailed();
+	}
+	
+	public void reverseGeocode( int latitude, int longitude )
+	{
+		
+	}
+	
+}

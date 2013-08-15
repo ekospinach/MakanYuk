@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.kitsune.thirdlib.ReverseGeocodeHelper.OnReverseGeocode;
-
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +21,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.kitsune.thirdlib.ReverseGeocodeHelper.OnReverseGeocode;
+
 /**
  * LocationHelper class to help getting user location
  * @author panjigautama
@@ -31,7 +32,7 @@ public class LocationHelper implements LocationListener
 	private final String TAG = "LocationHelper";
 	private String mActiveGPSmessage = "Activate GPS for better experience";
 	private String mProvider;
-	private Context mContext;
+	private Context mActivity;
 	private Location mLocation;
 	private Criteria mCriteria;
 	private LocationManager mLocationManager;
@@ -48,13 +49,13 @@ public class LocationHelper implements LocationListener
 	private final int MINUTES = 1000 * 60;
 	private final int INTERVAL_LOCATION_CHECKER = MINUTES * 1;
 	
-	public LocationHelper(Context context) 
+	public LocationHelper(Activity activity) 
 	{
-		mContext 	= context;
+		mActivity 	= activity;
 		mCriteria 	= new Criteria();
 		mCriteria.setAccuracy(Criteria.ACCURACY_FINE);
 		
-		mLocationManager = (LocationManager) mContext.getSystemService( Context.LOCATION_SERVICE );
+		mLocationManager = (LocationManager) mActivity.getSystemService( Context.LOCATION_SERVICE );
     	mReverseGeocodeHelper = new ReverseGeocodeHelper();
     	
     	mReverseGeocodeHelper.setOnReverseGeocodeListener( reverseGeocodeListener );
@@ -105,7 +106,7 @@ public class LocationHelper implements LocationListener
 			if ( !gpsEnabled ) 
 			{
 				// prompt to enabled GPS for better experience
-				AlertDialog.Builder promptActivateGPS = new AlertDialog.Builder( mContext );
+				AlertDialog.Builder promptActivateGPS = new AlertDialog.Builder( mActivity );
 				promptActivateGPS.setMessage( mActiveGPSmessage );
 				
 				promptActivateGPS.setPositiveButton( "OK", new DialogInterface.OnClickListener() 
@@ -113,7 +114,7 @@ public class LocationHelper implements LocationListener
 				    public void onClick(DialogInterface dialog, int id) 
 				    {
 				    	Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-				    	mContext.startActivity(intent);
+				    	mActivity.startActivity(intent);
 				    }
 				});
 				
@@ -133,7 +134,19 @@ public class LocationHelper implements LocationListener
 		
 	    // Define the criteria how to select the location provider -> use default
 	    mProvider = mLocationManager.getBestProvider( mCriteria, mIsOnlyUseEnabledProvider );
-	    mLocation = mLocationManager.getLastKnownLocation( mProvider );
+	    if( mProvider != null)
+	    {
+	    	mLocation = mLocationManager.getLastKnownLocation( mProvider );
+	    }
+	    else
+	    {	
+	    	String msg = "There is no available location services";
+	    	// provider will be null if there is no available enabled provider
+	    	Log.i( TAG , msg);
+	    	showInformationDialog( msg );
+	    	return;
+	    }
+	    	
 	    if ( mLocation != null ) 
 	    {
 	    	Log.i( TAG , "Provider " + mProvider + " has been selected.");
@@ -154,7 +167,11 @@ public class LocationHelper implements LocationListener
 		if( mIsInitLocationCalled )
 		{
 		    mProvider = mLocationManager.getBestProvider( mCriteria, true );
-			mLocationManager.requestLocationUpdates( mProvider, mIntervalUpdate, mMinimumDistance, this );			
+		    if( mProvider!= null )
+		    {
+		    	mLocationManager.requestLocationUpdates( mProvider, mIntervalUpdate, mMinimumDistance, this );	
+		    }
+					
 		}
 		else
 		{
@@ -223,7 +240,7 @@ public class LocationHelper implements LocationListener
             boolean isGCDAvailable = Geocoder.isPresent();
             if( isGCDAvailable )
             {
-                Geocoder gcd = new Geocoder( mContext, Locale.getDefault() );
+                Geocoder gcd = new Geocoder( mActivity, Locale.getDefault() );
 	            addresses = gcd.getFromLocation( currentLatitude, currentLongitude, 5 );
 	            if (addresses.size() > 0) 
 	            {
@@ -365,5 +382,15 @@ public class LocationHelper implements LocationListener
 			}
 			
 	};
+	
+	public void showInformationDialog( String message )
+	{
+		AlertDialog.Builder dialog = new AlertDialog.Builder( mActivity );
+		dialog.setMessage( message );
+		dialog.setPositiveButton("OK", null);
+		
+		AlertDialog infoDialog = dialog.create();
+		infoDialog.show();
+	}
 	
 }
